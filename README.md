@@ -11,7 +11,7 @@ Everything in it is a lesson from a real mainline port, generalised: why the pre
 The skill is plain `SKILL.md` plus markdown commands, so it works in any harness that reads skill frontmatter. Clone it once into a shared location and link it wherever you need it:
 
 ```sh
-git clone https://github.com/angelwzr/linux-porting-skill ~/.agents/skills/linux-phone-porting
+git clone https://github.com/angelwzr/linux-phone-porting ~/.agents/skills/linux-phone-porting
 ```
 
 Then link it into each harness that should see it:
@@ -26,8 +26,6 @@ ln -s ~/.agents/skills/linux-phone-porting <project>/.claude/skills/linux-phone-
 ```
 
 Harnesses that read `~/.agents/skills/` directly need no link at all. For anything else, point its skill directory at the same clone — one checkout, one `git pull` to update everything.
-
-The link target is named for the skill, not the repo: harnesses match on the `name` in `SKILL.md` frontmatter, so keeping the directory aligned with it avoids confusion later.
 
 The commands are optional and install separately:
 

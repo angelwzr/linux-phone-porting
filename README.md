@@ -1,78 +1,86 @@
 # linux-phone-porting
 
-An [agent skill](https://code.claude.com/docs/en/skills) that enforces evidence-first debugging when porting mainline Linux to a phone.
+An [agent skill](https://code.claude.com/docs/en/skills) for porting mainline Linux to a phone. It makes your coding agent gather evidence and do research **before** it writes a fix.
 
-Bring-up iterations are expensive — a build, a flash, and a boot for every guess — and blind fixes get refuted far more often than they land. The skill imposes an order on the session: back up the stock system while it is still readable, capture evidence from the live device, research across mainline, the vendor kernel, postmarketOS, Halium/UBports, Mobian and NixOS, and only then write a fix, one variable per flash.
+## Why
 
-Everything in it is a lesson from a real mainline port, generalised: why the pre-flash backup is a research source and not just insurance, which evidence channels survive a wedge and which quietly lose your record, the observations that manufacture the symptom they are meant to measure, and why the stock DTB on the device beats the sibling SoC's device tree when the two disagree.
+Every guess on a phone under bring-up costs a build, a flash, and a boot. Five to ten minutes, and most guesses are wrong.
+
+So the skill imposes an order on the session:
+
+1. Back up the stock system while it is still readable — it is also your best research source.
+2. Capture evidence from the live device.
+3. Research the problem across six independent sources.
+4. Only then write a fix, one variable at a time.
+
+Everything in it came out of a real mainline port and was measured on hardware — which evidence channels survive a wedge and which quietly lose your logs, which observations manufacture the very symptom they are meant to measure, and why the stock DTB pulled off the device beats the sibling SoC's device tree whenever the two disagree.
 
 ## Install
 
-The skill is plain `SKILL.md` plus markdown commands, so it works in any harness that reads skill frontmatter. Clone it once into a shared location and link it wherever you need it:
+**Easiest — ask your agent.** Paste this into Claude Code (or any agent with shell access):
+
+> Install the skill from https://github.com/angelwzr/linux-phone-porting — clone it into `~/.agents/skills/linux-phone-porting`, symlink it into my skills directory, and symlink `commands/*.md` into my commands directory.
+
+**By hand.** Clone once, link wherever you need it:
 
 ```sh
 git clone https://github.com/angelwzr/linux-phone-porting ~/.agents/skills/linux-phone-porting
-```
 
-Then link it into each harness that should see it:
-
-```sh
-# Claude Code — user-wide
-mkdir -p ~/.claude/skills
+# Claude Code, user-wide
+mkdir -p ~/.claude/skills ~/.claude/commands
 ln -s ~/.agents/skills/linux-phone-porting ~/.claude/skills/linux-phone-porting
-
-# a single project instead of user-wide
-ln -s ~/.agents/skills/linux-phone-porting <project>/.claude/skills/linux-phone-porting
-```
-
-Harnesses that read `~/.agents/skills/` directly need no link at all. For anything else, point its skill directory at the same clone — one checkout, one `git pull` to update everything.
-
-The commands are optional and install separately:
-
-```sh
-mkdir -p ~/.claude/commands
 ln -s ~/.agents/skills/linux-phone-porting/commands/*.md ~/.claude/commands/
 ```
 
-## The method
+For a single project instead of user-wide, link into `<project>/.claude/skills/` and `<project>/.claude/commands/`.
 
-| Phase            | What it enforces                                                                                                                                                                     |
-| ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **0. Set up**    | Pin the exact variant, target distro and boot topology. Back up every partition but userdata _before_ unlocking, and mine it — the stock system is the best research source you get. |
-| **1. Evidence**  | Debug knobs on before reproducing, full dmesg, pstore from the path systemd actually leaves it in. Hash what is flashed rather than trusting notes.                                  |
-| **2. Research**  | Six source families, all of them, before a line is written — whether the input is a crash log or a request to build something new. The first plausible hit is not the answer.        |
-| **3. Implement** | One variable per flash, hypothesis stated up front, cheap runtime tests preferred. Three refutations means the model is wrong — go back to phase 2.                                  |
+The skill is plain markdown with standard frontmatter, so it works in any harness that reads skills. Point that harness at the same clone — one checkout, one `git pull` to update everything. The commands are optional; the skill works without them.
+
+## The four phases
+
+| Phase            | What it enforces                                                                                                                                                                                       |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **0. Set up**    | Pin the exact variant, target distro and boot topology. Back up every partition but userdata _before_ unlocking — then mine that backup, because the stock system is the best research source you get. |
+| **1. Evidence**  | Debug knobs on before you reproduce. Full dmesg. pstore from the path systemd actually leaves it in. Hash what is really flashed instead of trusting your notes.                                       |
+| **2. Research**  | All six source families, every time — whether you are chasing a crash log or building something new. The first plausible hit is not the answer.                                                        |
+| **3. Implement** | One variable per flash, hypothesis stated up front, cheap runtime tests over reflashes. Three refutations means your model is wrong: go back to phase 2.                                               |
 
 ## Commands
 
-The first five run one phase of the skill on its own, for when you do not want the whole workflow. The last runs all of them in a loop.
+Optional slash commands, one per phase, for when you want a single step rather than the whole workflow.
 
-| Command           | Phase | Use it when                                                                                                                           |
-| ----------------- | ----- | ------------------------------------------------------------------------------------------------------------------------------------- |
-| `/port-setup`     | 0     | Starting a new port. Pins down the exact variant and target distro, then takes the backup the later phases research against.          |
-| `/evidence-sweep` | 1     | The device just failed and you want everything captured before anything changes. Produces evidence, refuses to diagnose.              |
-| `/source-sweep`   | 2     | Evidence is in hand and you need the six-source research fan-out. Reports per source, including the ones that had nothing.            |
-| `/port-research`  | 2     | You have been asked to build or enable something that has never worked. Same sweep, entered from the capability side.                 |
-| `/flash-gate`     | 3     | You have a fix and want it challenged before it costs a boot. Six questions; any "no" blocks the flash.                               |
-| `/port-loop`      | 0-3   | You want a capability working and are content to let the agent iterate research, apply, verify until it is or the model is exhausted. |
+- **`/port-setup`** — _run once, at the start of a port._ Pins down the exact device variant, target distro and boot topology, then takes the pre-flash backup and extracts the stock DTB, firmware layout and vendor configs from it. Everything later phases research against comes from here.
 
-`/port-setup` runs once per port. `/source-sweep` and `/port-research` are the same phase from opposite directions — one starts from a symptom, the other from a request — and both feed `/flash-gate`. Each states its precondition rather than assuming the previous one ran.
+- **`/evidence-sweep`** — _the device just failed._ Turns on the debug knobs, reproduces, and captures everything: dmesg, pstore, console records, a read-back hash of what is actually flashed. Deliberately refuses to diagnose — the output is evidence, nothing more.
 
-`/port-loop` orchestrates the others rather than repeating them: research, gate, apply the cheapest test that works, verify, record. It flashes boot, dtbo and modules on its own once the gate passes, and stops for a human before the bootloader, modem NV/EFS, persist or the partition table — anything the phase 0 backup cannot undo. It also stops at three refutations after widening scope once, and when the device stops answering. Every iteration is recorded with what its refutation rules out, so the loop cannot re-propose a change it already disproved.
+- **`/source-sweep`** — _you have evidence and need answers._ Fans out across all six sources (mainline, vendor kernel, postmarketOS, Halium/UBports, Mobian, NixOS) and reports what each one said, including the ones that said nothing. Ends with hypotheses ranked by what backs them.
 
-## Recommended skills to pair with
+- **`/port-research`** — _you have been asked to build something that has never worked._ The same sweep entered from the other side: no crash log, so the device data is the phase 0 material. Ends with a plan and its sources attached, not a hypothesis about a symptom.
 
-The skill references three capabilities without hard-depending on any of them — it checks whether one is installed and falls back to plain reasoning if not, so nothing breaks when they are absent. Install them and the research phase gets materially better:
+- **`/flash-gate`** — _you have a fix and it is about to cost a boot._ Six questions: what is the hypothesis, which source backs it, is it one variable, can it be tested without flashing, how many fixes have already been refuted, and what result would refute this one. Any "no" blocks the flash.
 
-- **A kernel-development skill** — for identifying which driver, binding, or firmware interface owns a failure. `linux-kernel-development` and `linux-kernel-crash-debug` both fill this role; a subsystem-specific one (modules, DRM, remoteproc) helps where it matches.
-- **A documentation-retrieval skill** — for current API and configuration details on userspace libraries and tools involved in a bring-up, rather than recalled signatures. `find-docs` (Context7-backed) is one such.
-- **A web-research skill** — for the phase 2 source sweep, which is a lot of repeated reading across mailing-list threads, driver sources and distro device repos. `wigolo` is one such; its local cache is the relevant part, since consecutive bring-up sessions tend to re-read the same handful of pages.
+- **`/port-loop`** — _you want a capability working and are happy to let the agent iterate._ Runs the loop itself: research, gate, apply the cheapest test available, verify, record what the result rules out. It flashes boot, dtbo and modules on its own once the gate passes, and stops for you before the bootloader, modem NV/EFS, persist or the partition table — anything the phase 0 backup cannot undo. It also stops after three refutations (having widened scope once), and when the device stops answering.
 
-Names are given as examples, not as dependencies. Any skill covering the capability works, and the skill degrades to plain reasoning with none installed.
+`/source-sweep` and `/port-research` are the same phase approached from opposite directions — one starts from a symptom, the other from a request — and both feed `/flash-gate`. Each command states its own precondition, so you can start anywhere.
+
+## Pairs well with
+
+The skill names three capabilities it can use, checks whether one is installed, and falls back to plain reasoning when none is. Nothing breaks if you install none of them — but the research phase gets noticeably better with them:
+
+- **A kernel-development skill**, to work out which driver, binding or firmware interface owns a failure.
+  Examples: `linux-kernel-development`, `linux-kernel-crash-debug`, or a subsystem-specific one where it matches.
+
+- **A documentation-retrieval skill**, for current API and configuration details on the userspace libraries involved, rather than recalled signatures.
+  Example: `find-docs` (Context7-backed).
+
+- **A web-research skill**, for the phase 2 sweep — a lot of repeated reading across mailing-list threads, driver sources and distro device repos.
+  Example: `wigolo`. The local cache is the part that matters, since consecutive sessions tend to re-read the same handful of pages.
+
+These are examples, not dependencies. Any skill covering the capability will do.
 
 ## Adapting it
 
-The skill is deliberately device-agnostic — no tool paths, no partition names, no hashes. If your port has its own harness, keep those specifics in your project's own `CLAUDE.md` or a sibling skill and leave this one as the method.
+The skill is deliberately device-agnostic: no tool paths, no partition names, no hashes. Keep your own port's specifics in your project's `CLAUDE.md` or a sibling skill, and leave this one as the method.
 
 ## License
 

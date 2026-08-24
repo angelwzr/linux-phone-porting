@@ -1,6 +1,6 @@
 # linux-phone-porting
 
-An [agent skill](https://code.claude.com/docs/en/skills) for porting mainline Linux to a phone. It makes your coding agent gather evidence and do research **before** it writes a fix.
+An agent skill for porting mainline Linux to a phone. It makes your coding agent gather evidence and do research **before** it writes a fix.
 
 ## Why
 

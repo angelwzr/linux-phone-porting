@@ -13,7 +13,7 @@ So the skill imposes an order on the session:
 3. Research the problem across six independent sources.
 4. Only then write a fix, one variable at a time.
 
-Everything in it came out of a real mainline port and was measured on hardware — which evidence channels survive a wedge and which quietly lose your logs, which observations manufacture the very symptom they are meant to measure, and why the stock DTB pulled off the device beats the sibling SoC's device tree whenever the two disagree.
+Everything in it came out of one real port — mainline Linux on a Xiaomi Mi A3, running NixOS on kernels 7.1 and 7.2 — and every claim was measured on that hardware: which evidence channels survive a wedge and which quietly lose your logs, which observations manufacture the very symptom they are meant to measure, and why the stock DTB pulled off the device beats the sibling SoC's device tree whenever the two disagree.
 
 ## Install
 

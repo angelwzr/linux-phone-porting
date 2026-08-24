@@ -45,17 +45,20 @@ ln -s ~/.agents/skills/linux-phone-porting/commands/*.md ~/.claude/commands/
 
 ## Commands
 
-Each runs one phase of the skill on its own, for when you do not want the whole workflow.
+The first five run one phase of the skill on its own, for when you do not want the whole workflow. The last runs all of them in a loop.
 
-| Command           | Phase | Use it when                                                                                                                  |
-| ----------------- | ----- | ---------------------------------------------------------------------------------------------------------------------------- |
-| `/port-setup`     | 0     | Starting a new port. Pins down the exact variant and target distro, then takes the backup the later phases research against. |
-| `/evidence-sweep` | 1     | The device just failed and you want everything captured before anything changes. Produces evidence, refuses to diagnose.     |
-| `/source-sweep`   | 2     | Evidence is in hand and you need the six-source research fan-out. Reports per source, including the ones that had nothing.   |
-| `/port-research`  | 2     | You have been asked to build or enable something that has never worked. Same sweep, entered from the capability side.        |
-| `/flash-gate`     | 3     | You have a fix and want it challenged before it costs a boot. Six questions; any "no" blocks the flash.                      |
+| Command           | Phase | Use it when                                                                                                                           |
+| ----------------- | ----- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| `/port-setup`     | 0     | Starting a new port. Pins down the exact variant and target distro, then takes the backup the later phases research against.          |
+| `/evidence-sweep` | 1     | The device just failed and you want everything captured before anything changes. Produces evidence, refuses to diagnose.              |
+| `/source-sweep`   | 2     | Evidence is in hand and you need the six-source research fan-out. Reports per source, including the ones that had nothing.            |
+| `/port-research`  | 2     | You have been asked to build or enable something that has never worked. Same sweep, entered from the capability side.                 |
+| `/flash-gate`     | 3     | You have a fix and want it challenged before it costs a boot. Six questions; any "no" blocks the flash.                               |
+| `/port-loop`      | 0-3   | You want a capability working and are content to let the agent iterate research, apply, verify until it is or the model is exhausted. |
 
 `/port-setup` runs once per port. `/source-sweep` and `/port-research` are the same phase from opposite directions — one starts from a symptom, the other from a request — and both feed `/flash-gate`. Each states its precondition rather than assuming the previous one ran.
+
+`/port-loop` orchestrates the others rather than repeating them: research, gate, apply the cheapest test that works, verify, record. It flashes boot, dtbo and modules on its own once the gate passes, and stops for a human before the bootloader, modem NV/EFS, persist or the partition table — anything the phase 0 backup cannot undo. It also stops at three refutations after widening scope once, and when the device stops answering. Every iteration is recorded with what its refutation rules out, so the loop cannot re-propose a change it already disproved.
 
 ## Recommended skills to pair with
 

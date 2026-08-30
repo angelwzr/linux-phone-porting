@@ -36,11 +36,15 @@ For a single project instead of user-wide, link into `<project>/.claude/skills/`
 
 The skill is plain markdown with standard frontmatter, so it works in any harness that reads skills. Point that harness at the same clone — one checkout, one `git pull` to update everything. The commands are optional; the skill works without them.
 
+## Requirements
+
+A phone with an **unlocked bootloader**. Locked devices are out of scope — the skill does not unlock bootloaders and does not advise on unlocking. Unlocking wipes data on most devices and one wrong step can brick the phone, so unlock first, through your device maker's own instructions, before starting a port.
+
 ## The four phases
 
 | Phase            | What it enforces                                                                                                                                                                                       |
 | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **0. Set up**    | Pin the exact variant, target distro and boot topology. Back up every partition but userdata _before_ unlocking — then mine that backup, because the stock system is the best research source you get. |
+| **0. Set up**    | Unlocked bootloader required. Pin the exact variant, target distro and boot topology, back up every partition but userdata, then mine that backup — the stock system is the best research source you get. |
 | **1. Evidence**  | Debug knobs on before you reproduce. Full dmesg. pstore from the path systemd actually leaves it in. Hash what is really flashed instead of trusting your notes.                                       |
 | **2. Research**  | All six source families, every time — whether you are chasing a crash log or building something new. The first plausible hit is not the answer.                                                        |
 | **3. Implement** | One variable per flash, hypothesis stated up front, cheap runtime tests over reflashes. Three refutations means your model is wrong: go back to phase 2.                                               |

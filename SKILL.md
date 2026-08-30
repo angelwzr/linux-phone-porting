@@ -1,6 +1,6 @@
 ---
 name: linux-phone-porting
-description: Use for every hardware bring-up / debug session when porting mainline Linux to a phone. Enforces evidence-first debugging - capture device logs, then research across mainline, the vendor kernel, postmarketOS, Halium/UBports, Mobian and NixOS - before writing or flashing any fix.
+description: Use for every hardware bring-up / debug session when porting mainline Linux to a phone. Enforces evidence-first debugging - capture device logs, then research across mainline, the vendor kernel, postmarketOS, Halium/UBports, Mobian and NixOS - before writing or flashing any fix. Requires an already-unlocked bootloader; locked devices are out of scope.
 ---
 
 # Linux Phone Porting
@@ -15,7 +15,8 @@ Establish the target first, because every later answer depends on it:
 
 - **Exact device identity** — marketing name, codename, SoC, and the regional or storage variant. Sibling variants of the same marketing name routinely differ in panel, touch controller, or modem, and a fix researched against the wrong variant looks plausible and fails.
 - **Target distro and init** — postmarketOS, Mobian, NixOS, plain Debian, something else. This decides packaging, image layout, and which of the phase 2 sources is closest to home.
-- **Boot topology** — A/B or non-A/B, slot layout, whether the bootloader is unlocked and what unlocking costs. On most devices unlocking wipes, so it happens **after** the backup, not before.
+- **Boot topology** — A/B or non-A/B, slot layout, and bootloader lock state. **Unlocked bootloaders only.** If the bootloader is locked, stop: this skill does not unlock bootloaders and does not provide unlocking steps — point the user at their OEM's own instructions and resume once the device is unlocked.
+- **Recovery** — whether a custom recovery is installed. Not a requirement: a convenience for backing up and restoring.
 
 Then take a full backup of every partition **except userdata**:
 

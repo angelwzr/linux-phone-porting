@@ -13,8 +13,9 @@ This runs once per port, before the first flash. Do not flash anything during it
 2. Target distro and init system.
 3. Boot topology: A/B or non-A/B, slot layout, current bootloader lock state.
 4. Whether a backup already exists. If the user points to one, verify its coverage and re-check its hashes rather than trusting the directory name.
+5. Whether a custom recovery is installed. Not a requirement — a convenience for backing up and restoring.
 
-**Warn before unlocking.** On most devices unlocking the bootloader wipes. The backup comes first.
+**Unlocked bootloader required.** If the bootloader is locked, stop: do not unlock it and do not provide unlocking steps — point the user at their OEM's own instructions and resume once the device is unlocked.
 
 **Take the backup** — every partition except userdata:
 

@@ -29,6 +29,7 @@ This runs once per port, before the first flash. Do not flash anything during it
 - Extract the stock DTB (`dd` the untouched boot slot, scan for `d00dfeed`, `dtc -I dtb -O dts`).
 - Inventory the firmware blobs and their load order.
 - Record the vendor kernel cmdline and the boot image layout: offsets, header version, page size.
+- Record the exact kernel version string (`uname -a`, `/proc/version`) — the fingerprint that selects the right GPL-published OEM source release in the research phase.
 - Note vendor sensor, modem and HAL configs describing interfaces mainline will have to satisfy.
 
 **Set the conventions**: a host-side log directory that takes one subdirectory per boot, and a recovery path that has been shown to work.

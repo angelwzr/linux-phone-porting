@@ -19,7 +19,7 @@ Check which of these are installed before calling them, and skip silently if abs
 Then sweep **all six** source families, in parallel subagents where possible. The point is that the fix comes from all of them, not from the first plausible hit:
 
 1. **Mainline** — lore.kernel.org, the driver source, DT bindings, and the dtsi of the closest sibling SoC.
-2. **Downstream vendor kernel** — the OEM release for a sibling device, and above all the **stock DTB read off this device** (`dd` the untouched boot slot, scan for `d00dfeed`, `dtc -I dtb -O dts`). Where the sibling SoC and the stock DTB disagree, the stock DTB wins.
+2. **Downstream vendor kernel — the GPL-published OEM source.** GPLv2 obliges Android OEMs to publish the kernel sources they shipped, so an exact release for this device usually exists — OEM open-source portals, their GitHub/GitLab mirrors, XDA/community archives when a portal link has died. Match the tarball to the `/proc/version` fingerprint from phase 0, and mine it as an oracle (board dts, defconfig, out-of-tree vendor drivers) rather than assuming it builds; a sibling device's release is the fallback when no exact one surfaces. Above all the **stock DTB read off this device** (`dd` the untouched boot slot, scan for `d00dfeed`, `dtc -I dtb -O dts`). Where the sibling SoC and the stock DTB disagree, the stock DTB wins.
 3. **postmarketOS** — pmaports device packages and APKBUILDs, merge requests, wiki device pages, the SoC-mainline tree.
 4. **Halium / UBports** — `halium/android_device_*`, `hybris-boot` configs, UBports device ports. Best source for the vendor firmware handshake: blob paths and load order, expected properties and sockets, HAL configs.
 5. **Mobian** — the Debian device repos.

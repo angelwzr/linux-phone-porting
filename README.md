@@ -34,7 +34,19 @@ ln -s ~/.agents/skills/linux-phone-porting/commands/*.md ~/.claude/commands/
 
 For a single project instead of user-wide, link into `<project>/.claude/skills/` and `<project>/.claude/commands/`.
 
-The skill is plain markdown with standard frontmatter, so it works in any harness that reads skills. Point that harness at the same clone — one checkout, one `git pull` to update everything. The commands are optional; the skill works without them.
+The skill is plain markdown with standard frontmatter, so it works in any harness that reads skills. Point that harness at the same clone — one checkout, and updates are one pull (see [Updating](#updating)). The commands are optional; the skill works without them.
+
+## Updating
+
+One checkout, one pull. Everything your harness sees — the skill and the slash commands — is a symlink into the checkout, so a single command updates all of it at once:
+
+```sh
+git -C ~/.agents/skills/linux-phone-porting pull --ff-only
+```
+
+`--ff-only` makes a diverged history fail loudly instead of silently merging. Project-local links point at the same checkout and follow the same pull.
+
+Keep the checkout **pull-only**. Make changes in your own clone or fork, never through a symlinked path — if `git -C ~/.agents/skills/linux-phone-porting status` shows modifications, someone edited the wrong copy and the next pull will conflict. `git -C ~/.agents/skills/linux-phone-porting reset --hard origin/main` throws local edits away and re-syncs.
 
 ## Requirements
 
@@ -85,6 +97,13 @@ These are examples, not dependencies. Any skill covering the capability will do.
 ## Adapting it
 
 The skill is deliberately device-agnostic: no tool paths, no partition names, no hashes. Keep your own port's specifics in your project's `CLAUDE.md` or a sibling skill, and leave this one as the method.
+
+## Changelog
+
+- **2026-08-31** — Phase 2 names the GPL-published OEM kernel sources as an explicit oracle: phase 0 records the `/proc/version` fingerprint, and the exact-device release gets mined for board dts, defconfig and out-of-tree vendor drivers instead of being assumed buildable.
+- **2026-08-30** — Requirements made explicit: an unlocked bootloader is required — locked devices are out of scope and get pointed at the OEM's own unlocking instructions. Setup also records whether a custom recovery is installed.
+- **2026-08-24** — New `/port-loop` command: an iterate-until-done orchestrator over the four phases.
+- **2026-08-23** — First release: the evidence-first skill for mainline bring-up, with one command per phase.
 
 ## License
 

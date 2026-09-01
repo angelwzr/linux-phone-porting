@@ -100,7 +100,7 @@ The skill is deliberately device-agnostic: no tool paths, no partition names, no
 
 ## Changelog
 
-- **2026-09-01** — New ground made explicit: an empty six-source sweep is named as the normal case of a bring-up and routes to the primary artefacts (vendor driver source, stock DTB, closest mainline sibling driver) for derivation; the three-refutation rule stops the guessing, not the port.
+- **2026-09-01** — New ground made explicit: an empty six-source sweep is named as the normal case of a bring-up and routes to the primary artefacts (vendor driver source, stock DTB, closest mainline sibling driver) for derivation, and the three-refutation rule stops the guessing, not the port. The phase 2 capability checks also got a mechanism: scan the session's own skill list and read a listed kernel-development or crash-analysis skill, replacing an unverifiable "if installed" that never fired.
 - **2026-08-31** — Phase 2 names the GPL-published OEM kernel sources as an explicit oracle: phase 0 records the `/proc/version` fingerprint, and the exact-device release gets mined for board dts, defconfig and out-of-tree vendor drivers instead of being assumed buildable.
 - **2026-08-30** — Requirements made explicit: an unlocked bootloader is required — locked devices are out of scope and get pointed at the OEM's own unlocking instructions. Setup also records whether a custom recovery is installed.
 - **2026-08-24** — New `/port-loop` command: an iterate-until-done orchestrator over the four phases.

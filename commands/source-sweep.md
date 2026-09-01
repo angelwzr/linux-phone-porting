@@ -10,7 +10,7 @@ Run phase 2 of the `linux-phone-porting` skill for: $ARGUMENTS
 - **Investigating a failure:** its evidence must already be captured. If it is not, stop and run `/evidence-sweep` first; this command is not a substitute for reading the device.
 - **Adding a capability** that has never worked on this board: the phase 0 artefacts are the input — stock DTB, vendor configs, firmware blob layout. If they were never extracted, run `/port-setup` first.
 
-Check which of these are installed before calling them, and skip silently if absent:
+Your session context lists the skills available to you. Scan that list first, then load each of these that appears in it — skip silently only when absent:
 
 - a kernel-development or crash-analysis skill, to identify the owning driver, binding, or firmware interface
 - a documentation-retrieval skill, for any userspace library or tool involved

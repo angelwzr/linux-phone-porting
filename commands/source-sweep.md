@@ -25,4 +25,4 @@ Then sweep **all six** source families, in parallel subagents where possible. Th
 5. **Mobian** — the Debian device repos.
 6. **NixOS** — mobile-nixos patterns and nixpkgs packaging.
 
-Report per source: what it says about this symptom, or explicitly that it had nothing. Finish with the candidate hypotheses ranked by evidential support, and name which source backs each.
+Report per source: what it says about this symptom, or explicitly that it had nothing. An empty source is a finding, not a failure. When all six come back empty, derive the candidate hypotheses from the primary artefacts — the vendor driver source, the stock DTB, the closest mainline sibling driver — and rank them like any other. Finish with the hypotheses ranked by evidential support, and name which source backs each.

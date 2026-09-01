@@ -54,12 +54,12 @@ A phone with an **unlocked bootloader**. Locked devices are out of scope — the
 
 ## The four phases
 
-| Phase            | What it enforces                                                                                                                                                                                       |
-| ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **0. Set up**    | Unlocked bootloader required. Pin the exact variant, target distro and boot topology, back up every partition but userdata, then mine that backup — the stock system is the best research source you get. |
-| **1. Evidence**  | Debug knobs on before you reproduce. Full dmesg. pstore from the path systemd actually leaves it in. Hash what is really flashed instead of trusting your notes.                                       |
-| **2. Research**  | All six source families, every time — whether you are chasing a crash log or building something new. The first plausible hit is not the answer.                                                        |
-| **3. Implement** | One variable per flash, hypothesis stated up front, cheap runtime tests over reflashes. Three refutations means your model is wrong: go back to phase 2.                                               |
+| Phase            | What it enforces                                                                                                                                                                                                                                                                                |
+| ---------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **0. Set up**    | Unlocked bootloader required. Pin the exact variant, target distro and boot topology, back up every partition but userdata, then mine that backup — the stock system is the best research source you get.                                                                                       |
+| **1. Evidence**  | Debug knobs on before you reproduce. Full dmesg. pstore from the path systemd actually leaves it in. Hash what is really flashed instead of trusting your notes.                                                                                                                                |
+| **2. Research**  | All six source families, every time — whether you are chasing a crash log or building something new. The first plausible hit is not the answer. An empty sweep routes to the primary artefacts — vendor driver, stock DTB, closest mainline sibling — and the design gets derived, not shelved. |
+| **3. Implement** | One variable per flash, hypothesis stated up front, cheap runtime tests over reflashes. Three refutations means your model is wrong: go back to phase 2 — the rule stops the guessing, not the work.                                                                                            |
 
 ## Commands
 
@@ -100,6 +100,7 @@ The skill is deliberately device-agnostic: no tool paths, no partition names, no
 
 ## Changelog
 
+- **2026-09-01** — New ground made explicit: an empty six-source sweep is named as the normal case of a bring-up and routes to the primary artefacts (vendor driver source, stock DTB, closest mainline sibling driver) for derivation; the three-refutation rule stops the guessing, not the port.
 - **2026-08-31** — Phase 2 names the GPL-published OEM kernel sources as an explicit oracle: phase 0 records the `/proc/version` fingerprint, and the exact-device release gets mined for board dts, defconfig and out-of-tree vendor drivers instead of being assumed buildable.
 - **2026-08-30** — Requirements made explicit: an unlocked bootloader is required — locked devices are out of scope and get pointed at the OEM's own unlocking instructions. Setup also records whether a custom recovery is installed.
 - **2026-08-24** — New `/port-loop` command: an iterate-until-done orchestrator over the four phases.

@@ -78,11 +78,13 @@ Either way, **before** writing anything:
    - **Mobian** — the Debian device repos.
    - **NixOS** — mobile-nixos patterns and nixpkgs packaging.
 
+**Thin results are the normal case, not a blocker.** Most of what a port needs has never been done on this board, and often not on this SoC at all. Six sources reporting nothing means nobody has published the work — it never means the work should stop or be handed back. When precedent is absent, the answers are still in the primary artefacts: the out-of-tree vendor driver that already drives the peripheral (register sequences, firmware handshake, GPIO and regulator wiring), the stock DTB's own node for it, the vendor HAL config naming what userspace expects, and the closest mainline driver for the same device class as a structural template. Read those, derive the design, and write the missing piece — a DT node, a quirk, a small driver. Authoring that piece is the ordinary terminal state of a bring-up, not an exception to be justified; the phase 0 backup and the one-variable-per-flash rule exist precisely so that a wrong derivation costs one boot and one ledger line, the same as any other refutation.
+
 ## 3. Implement only with a promising, evidence-backed hypothesis
 
 - **One variable per flash.** State the hypothesis before flashing.
 - Prefer runtime tests over reflashes: push files with a tar pipe, unbind and rebind drivers, `insmod` a module. Seconds instead of minutes.
 - Device-tree-only changes are cheap — build just the DTB when the toolchain allows it.
-- **After 3 refuted fixes: stop.** Return to step 2 with a wider scope. Three misses means the model of the failure is wrong, not that the fourth tweak is the right one.
+- **After 3 refuted fixes: stop guessing, not stop working.** Three misses from the same model of the failure mean the model is wrong, and a fourth tweak from it will miss too. Return to step 2 with a wider scope — a different layer of the stack, or the primary artefacts directly where precedent is absent — and come back with findings stacked, as in the worked example below.
 
 A worked shape, from a Wi-Fi bring-up that took this path: five blind device-tree tweaks all failed. The fix was five separate findings stacked, every one of them from research rather than guessing — a trustzone memory mode, vendor firmware paths, a host-capability quirk, the SMMU stream ID off the stock DTB, and one property that mainline had made obsolete and needed dropping. No single tweak would have got there.

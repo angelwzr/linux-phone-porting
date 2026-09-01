@@ -16,6 +16,7 @@ This is `/source-sweep` entered from the other side. Use it when the request is 
 - What mainline already provides, and what is missing.
 - What the vendor stack does instead, from the stock DTB and Halium/UBports configs — the interface any mainline path will have to satisfy.
 - Which other distro has done this on this SoC, and what they had to add.
+- If no distro has, say so plainly and derive the plan from the primary artefacts instead — the vendor driver source, the stock DTB, the closest mainline sibling driver. Absence of precedent is the normal state of a bring-up, not a dead end.
 - The smallest first change that would produce a legible result, and what result would tell you the model is wrong.
 
 Do not write the change in this command. It ends at the plan, and `/flash-gate` still applies before anything reaches the device.

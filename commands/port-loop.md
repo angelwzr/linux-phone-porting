@@ -20,9 +20,9 @@ This runs the `linux-phone-porting` phases in a loop rather than one at a time. 
 **Stop and hand back to the human when any of these is true.**
 
 - The target sentence is satisfied, verified from device evidence rather than from the absence of an error.
-- **Three refutations on the same symptom.** Widen the scope once — re-enter `/port-research` on the layer above, not the same layer again — and if that round also refutes, stop. The model of the failure is wrong and more iterations will not find it.
+- **Three refutations on the same symptom.** Widen the scope once — re-enter `/port-research` on the layer above, or on the primary artefacts directly where no precedent exists, not the same layer again — and if that round also refutes, stop. The model of the failure is wrong and more iterations of it will not find it.
 - The next step would write to the bootloader, modem NV/EFS, persist, the partition table, or anything else whose loss is not recoverable from the phase 0 backup. Boot, dtbo, modules and the like are yours to flash; these are not. Say what you want to write and why, and wait.
 - The device stops responding on every evidence channel, or a flash leaves it unable to reach a known-good recovery path. Do not attempt further writes blind.
-- Research produces no new candidate — every source has been swept and returns what the ledger already contains.
+- Neither precedent nor derivation yields a testable next step: every source returns what the ledger already contains, and the primary artefacts — the vendor driver source, the stock DTB, the closest mainline sibling driver — offer nothing that can be stated as a falsifiable change with a named source behind it. An empty sweep alone is not this condition: empty precedent hands the work to the primary artefacts, and the loop continues.
 
 Report at the end: the ledger, the current state of the device, and either what made it work or what the refutations collectively rule out.

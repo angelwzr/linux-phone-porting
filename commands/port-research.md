@@ -13,10 +13,11 @@ This is `/source-sweep` entered from the other side. Use it when the request is 
 
 **Output.** Not a hypothesis about a symptom, but a plan with its sources attached:
 
-- What mainline already provides, and what is missing.
+- Who owns the hardware for it — a kernel driver, a firmware applet, or DSP-side code — answered by scanning the phase 0 images for the peripheral's symbols rather than assumed from the kernel side. A kernel-side shim with the real driver in firmware turns the plan from porting a driver into loading one.
+- What mainline already provides — its exported API, whether it reaches userspace or is kernel-internal only, and its gates (machine allowlists, pre-loaded semantics, built-in rather than module) — and what is missing.
 - What the vendor stack does instead, from the stock DTB and Halium/UBports configs — the interface any mainline path will have to satisfy.
 - Which other distro has done this on this SoC, and what they had to add.
 - If no distro has, say so plainly and derive the plan from the primary artefacts instead — the vendor driver source, the stock DTB, the closest mainline sibling driver. Absence of precedent is the normal state of a bring-up, not a dead end.
-- The smallest first change that would produce a legible result, and what result would tell you the model is wrong.
+- The smallest first change that would produce a legible result, stated with its falsifier — the cheapest experiment whose result kills the plan either way. That probe is built before anything larger.
 
 Do not write the change in this command. It ends at the plan, and `/flash-gate` still applies before anything reaches the device.

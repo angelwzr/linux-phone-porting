@@ -13,7 +13,7 @@ So the skill imposes an order on the session:
 3. Research the problem across six independent sources.
 4. Only then write a fix, one variable at a time.
 
-Everything in it came out of one real port — mainline Linux on a Xiaomi Mi A3, running NixOS on kernels 7.1 and 7.2 — and every claim was measured on that hardware: which evidence channels survive a wedge and which quietly lose your logs, which observations manufacture the very symptom they are meant to measure, and why the stock DTB pulled off the device beats the sibling SoC's device tree whenever the two disagree.
+Everything in it came out of one real port — mainline Linux on a Xiaomi Mi A3, running NixOS on kernels 7.1 and 7.2 — and every claim was measured on that hardware: which evidence channels survive a wedge and which quietly lose your logs, which observations manufacture the very symptom they are meant to measure, and why the stock DTB pulled off the device beats the sibling SoC's device tree whenever the two disagree. Its evidence notes keep the shape that external review worked against — numbered eliminations, an honest-limits section, and a method block exact enough to repeat — and an outside maintainer's review of those notes, taken as tracked changes, has caught real risks.
 
 ## Install
 
@@ -100,6 +100,7 @@ The skill is deliberately device-agnostic: no tool paths, no partition names, no
 
 ## Changelog
 
+- **2026-09-03** — Nine measured rules from continuing sessions on the same port. Capability bring-up now asks who owns the hardware, answered by scanning the phase 0 images for the peripheral's driver symbols — a kernel-side shim with the real driver in firmware flips the whole plan. Hypotheses get falsifiers written before builds, and the cheapest decisive experiment runs first. Firmware rejections are captured raw before interpreting the mapped errno. An empty scan is void until it has a positive control. Downstream identifiers are never copied into mainline nodes. Port scopes start from what mainline already provides — API, userspace surface, gates. Benchmarks name and verify their control condition. Probe modules are treated as leaving state, with one reboot budgeted per failed attempt.
 - **2026-09-01** — New ground made explicit: an empty six-source sweep is named as the normal case of a bring-up and routes to the primary artefacts (vendor driver source, stock DTB, closest mainline sibling driver) for derivation, and the three-refutation rule stops the guessing, not the port. The phase 2 capability checks also got a mechanism: scan the session's own skill list and read a listed kernel-development or crash-analysis skill, replacing an unverifiable "if installed" that never fired.
 - **2026-08-31** — Phase 2 names the GPL-published OEM kernel sources as an explicit oracle: phase 0 records the `/proc/version` fingerprint, and the exact-device release gets mined for board dts, defconfig and out-of-tree vendor drivers instead of being assumed buildable.
 - **2026-08-30** — Requirements made explicit: an unlocked bootloader is required — locked devices are out of scope and get pointed at the OEM's own unlocking instructions. Setup also records whether a custom recovery is installed.

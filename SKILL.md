@@ -72,6 +72,10 @@ Host-side gotchas worth pre-empting:
 - `find` needs `-L` when the start path is a symlink, or it returns silently empty.
 - Any wrapper or hook that rewrites command output — token filters, pagers, formatters — will corrupt evidence, sometimes by inverting a test rather than obviously breaking it. Use the raw command for anything you will commit as a finding.
 
+Operator hands are a step, not an assumption:
+
+- **When a step needs the operator's physical action** — moving a card between host and device, replugging a cable, holding buttons, confirming something on the device screen — name the exact action and its direction ("move the SD card from the host to the phone"), then **verify it happened before continuing**: an observable signal (device-side mount appears, USB re-enumerates, slot state changes), not the fact that you asked. A port session loses minutes to hours when the agent proceeds on an instruction the operator never registered as an action item.
+
 ## 2. Research before implementing — all of these sources
 
 Research always precedes implementation. What it consumes depends on what you are doing:

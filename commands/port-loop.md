@@ -14,7 +14,7 @@ This runs the `linux-phone-porting` phases in a loop rather than one at a time. 
 1. **Research.** `/port-research` on the current framing of the gap. On the first iteration that is the whole capability; afterwards it is whatever the last refutation left unexplained.
 2. **Gate.** `/flash-gate` the smallest change that would produce a legible result. All six questions pass or the change is not ready — in particular, one variable, and a stated result that would refute it.
 3. **Apply.** Prefer the cheap path every time: tar-pipe files, unbind/rebind, `insmod`, rebuild only the DTB. Flash only when nothing cheaper can test the hypothesis.
-4. **Verify.** `/evidence-sweep` on the result. Read it against the refutation criterion written in step 2, not for confirmation.
+4. **Verify.** `/evidence-sweep` on the result. Read it against the refutation criterion written in step 2, not for confirmation. If a step needed the operator's hands (moving a card, replugging, a button hold), name the exact action and direction when asking, and confirm it from an observable signal before continuing — never proceed on the assumption the request was carried out.
 5. **Record.** One line per iteration: hypothesis, source that backed it, what was applied, outcome, and on a refutation what it rules out. This ledger is the loop's memory — a later iteration that re-proposes a refuted change is a bug.
 
 **Stop and hand back to the human when any of these is true.**

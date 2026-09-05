@@ -5,7 +5,7 @@ argument-hint: "[the feature or capability you want working]"
 
 Get this working on the device, iterating until it does: $ARGUMENTS
 
-This runs the `linux-phone-porting` phases in a loop rather than one at a time. It does not replace them — each iteration calls them, and their rules still bind. Do not restate the six sources here; `/source-sweep` owns them.
+This runs the `linux-phone-porting` phases in a loop rather than one at a time. It does not replace them — each iteration calls them, and their rules still bind. Do not restate the seven sources here; `/source-sweep` owns them. Do not edit-and-hope either: every change lands by reading the exact current lines and writing the exact replacement — an edit that has to be "repaired" afterwards is redone from a fresh read, not patched over.
 
 **Before the first iteration.** Confirm the phase 0 artefacts exist — stock DTB, vendor configs, firmware layout, verified backup with hashes. If they do not, run `/port-setup` and stop; there is nothing to research against, and the loop would research some other board that shares this SoC. State the target as one falsifiable sentence: what the device will do that it does not do today, and how you will observe it.
 

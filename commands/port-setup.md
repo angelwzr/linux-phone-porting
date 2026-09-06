@@ -32,6 +32,12 @@ This runs once per port, before the first flash. Do not flash anything during it
 - Inventory every component the stock system will name — panel, touch controller, sensor set, camera sensors, modem and its RF configuration, WLAN/BT chip, charger and fuel gauge, audio path — and compare against the official spec sheets for this variant (via a web-research or documentation-retrieval skill). This is what catches "researched the wrong variant" before it costs a flash.
 - From rooted stock: the property dump (`getprop`), the stock kernel config (`/proc/config.gz`), the mounted vendor/odm trees, HAL and sensor configs, calibration artefacts, and the factory field-test modes.
 - Ask whether recent community custom ROMs exist for the device and record the newest as an optional, up-to-date development source. Measured: the most responsive OS ever run on one device was an unofficial recent-Android custom build, not the stock ROM — and its boot image shares the stock downstream lineage, so its DTB doubles as an independent cross-check.
+- Note that a bootable Android — stock or rooted custom — stays available as a data-gathering channel for the whole port, not just phase 0: a working vendor driver's probe and firmware sequence is read live next to a mainline failure, and hardware mainline cannot yet drive is exercised under Android to prove the silicon is fine. Never conclude anything about mainline behaviour from Android behaviour without a cross-check.
+
+**Prove the control channels.** Before finishing, verify the agent can actually reach the device on every channel it will need later, and record which work with their addresses:
+
+- `adb` and `fastboot` on the host, exercised against this device (`adb devices`, `fastboot devices` — an untested install is not a channel).
+- At least one post-boot control channel into the target Linux: USB-gadget Ethernet or a serial ACM console, ssh over network or over USB.
 
 **Lock the project to this ruleset.** Before finishing, write an explicit rule into the project's agent context files — `CLAUDE.md`, `AGENTS.md`, and any equivalent the project carries — stating that **all work touching this device goes through the `linux-phone-porting` skill's ruleset, and no action on the device is taken outside it**: every change researches per phase 2, gates per phase 3 (pre-build battery, edit precision, operator-hands verification), and flashes only through the gates above. The port survives on these rules being load-bearing, not advisory — a session that "just quickly" flashes outside the ruleset is how a backup-only-recoverable mistake happens.
 
@@ -43,6 +49,9 @@ This runs once per port, before the first flash. Do not flash anything during it
 - Record the exact kernel version string (`uname -a`, `/proc/version`) — the fingerprint that selects the right GPL-published OEM source release in the research phase.
 - Note vendor sensor, modem and HAL configs describing interfaces mainline will have to satisfy.
 
-**Set the conventions**: a host-side log directory that takes one subdirectory per boot, and a recovery path that has been shown to work.
+**Set the conventions**:
 
-Report: the target as confirmed by the user, what the backup covers and where it lives, the hashes, and the research artefacts extracted from it.
+- A recovery path that has been shown to work.
+- **Project layout**, modelled on the rules the skill carries: everything large, private, or device-derived under `artifacts/` at the project root — gitignored, never committed — and classified: `private/` (device-unique, never leaves the machine; the partition backup lives here, with a DO-NOT-RESTORE note for userdata), `firmware-harvest/` (blobs pending redaction), `android/` (reproducible stock-ROM packages and rooted captures), `debug-evidence/` (irreplaceable captures), `reference/` (reading copies). Publishable firmware goes to a sibling `firmware-publishable/` repository with its own git history, derived only after redaction. `logs/` takes one subdirectory per boot or deploy plus `LATEST-*` links. A README in `artifacts/` maps every path to its class and records hashes.
+
+Report: the target as confirmed by the user, what the backup covers and where it lives, the hashes, the research artefacts extracted from it, the verified control channels, and whether an Android system remains available as a data-gathering boot.

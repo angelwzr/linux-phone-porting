@@ -99,6 +99,7 @@ The skill is deliberately device-agnostic: no tool paths, no partition names, no
 
 - **2026-09-06**
   - `/port-loop` no longer dies at three refutations. At invocation it asks the operator for a refutation budget — 5, 15, or unlimited — recorded in the ledger header; every third refutation on the same symptom forces a scope widening (the layer above, or the primary artefacts) rather than a stop, and the loop hands back only when a finite budget is spent, the device stops answering, or nothing testable remains. `/flash-gate`'s refutation question reads against that budget when running under the loop.
+  - `/port-setup` ends by locking the project to the ruleset: it writes an explicit rule into the project's agent context files (`CLAUDE.md`, `AGENTS.md`, equivalents) that all work touching the device goes through the skill's phases and gates — no device action outside the ruleset.
   - Reboots are the agent's own when a channel exists: if the device is reachable over ssh, USB or fastboot, the agent reboots and continues; operator hands are reserved for what no channel reaches (battery pull, key combo, physically moving media).
 - **2026-09-05**
   - Phase 0 now inventories every component against the official spec sheets.

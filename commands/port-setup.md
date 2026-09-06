@@ -33,6 +33,8 @@ This runs once per port, before the first flash. Do not flash anything during it
 - From rooted stock: the property dump (`getprop`), the stock kernel config (`/proc/config.gz`), the mounted vendor/odm trees, HAL and sensor configs, calibration artefacts, and the factory field-test modes.
 - Ask whether recent community custom ROMs exist for the device and record the newest as an optional, up-to-date development source. Measured: the most responsive OS ever run on one device was an unofficial recent-Android custom build, not the stock ROM — and its boot image shares the stock downstream lineage, so its DTB doubles as an independent cross-check.
 
+**Lock the project to this ruleset.** Before finishing, write an explicit rule into the project's agent context files — `CLAUDE.md`, `AGENTS.md`, and any equivalent the project carries — stating that **all work touching this device goes through the `linux-phone-porting` skill's ruleset, and no action on the device is taken outside it**: every change researches per phase 2, gates per phase 3 (pre-build battery, edit precision, operator-hands verification), and flashes only through the gates above. The port survives on these rules being load-bearing, not advisory — a session that "just quickly" flashes outside the ruleset is how a backup-only-recoverable mistake happens.
+
 **Mine it as a research source**, and tell the user what was found:
 
 - Extract the stock DTB (`dd` the untouched boot slot, scan for `d00dfeed`, `dtc -I dtb -O dts`).

@@ -103,6 +103,8 @@ Either way, **before** writing anything:
 
 ## 3. Implement only with a promising, evidence-backed hypothesis
 
+- **A reboot is yours to do when a channel exists.** If the device is reachable — ssh, USB gadget, fastboot — reboot it yourself and continue; asking the operator to press buttons wastes a round trip. Reserve operator hands for what no channel reaches: a battery pull, a hardware key combo, physically moving media.
+
 - **One variable per flash, falsifier before build.** State the hypothesis before flashing — and go further: write the falsifier before writing any code. The falsifier is the smallest experiment whose result kills the plan either way, and it is built first; one of them — a single module load — returned the refusal that killed a 9.4k-line port premise. Order experiments by cost per information, not by plan order: the cheapest decisive experiment runs first.
 - Prefer runtime tests over reflashes: push files with a tar pipe, unbind and rebind drivers, `insmod` a module. Seconds instead of minutes. But a probe leaves state: a failed init can leave its platform device registered, so every retry costs a reboot, and a crashed probe can wedge the board into a physical power-cycle. Stage the probe's inputs and verify their hashes host-side before firing, make the probe idempotent, and expect one reboot per failed attempt.
 - Device-tree-only changes are cheap — build just the DTB when the toolchain allows it, then check the runtime surface, not just the build: a DT that builds clean can still bind to nothing (one thermal driver registers one zone per sensor id and silently drops a duplicate, so the zone list, not the build log, is the verdict).

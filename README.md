@@ -97,12 +97,28 @@ The skill is deliberately device-agnostic: no tool paths, no partition names, no
 
 ## Changelog
 
-- **2026-09-05** — Phase 0 now inventories every component against the official spec sheets, records the storage's own wear/lifetime percentage before anything is diagnosed as failing (measured: that reading overturned a false "storage is dying" verdict; the real fault cleared on one more stock-ROM fastboot flash), harvests deeper from rooted stock — treated like bootloader unlocking: the user roots the device, the skill never provides the steps — and records the newest community custom ROM as an optional up-to-date source (measured: an unofficial recent-Android build was the most responsive OS seen on one device). Setup also asks for the target userspace shell instead of assuming one, and strongly recommends the distro's own shell where it ships one. Phase 2 gains a seventh source family — the SoC vendor's mainline collaboration project (e.g. github.com/qualcomm-linux) — and now invokes its companion skills by name (`linux-kernel-development`/`linux-kernel-crash-debug`, `find-docs`, `wigolo`), each with a plain-tools fallback so the skill still works when none is installed. Phase 3 gains a strict pre-rebuild gate — patches apply cleanly, every referenced symbol exists in the tree, every config option exists in the kernel's Kconfig (non-existent options are silently ignored), touched units compile alone before any full kernel rebuild (measured: four consecutive rebuilds burned on missing symbols in unchecked patches) — an edit-precision rule (changes land by reading the exact current lines and writing the exact replacement; an edit needing "repair" is redone from a fresh read, and self-inflicted breakage then hand-fixed is a defect, not a workflow), and an operator-hands rule: when a step needs a physical action, name the exact action and its direction and verify it happened from an observable signal before continuing — never proceed on having asked.
-- **2026-09-06** — `/port-loop` no longer dies at three refutations. At invocation it asks the operator for a refutation budget — 5, 15, or unlimited — recorded in the ledger header; every third refutation on the same symptom forces a scope widening (the layer above, or the primary artefacts) rather than a stop, and the loop hands back only when a finite budget is spent, the device stops answering, or nothing testable remains. `/flash-gate`'s refutation question reads against that budget when running under the loop.
-- **2026-08-31** — Phase 2 names the GPL-published OEM kernel sources as an explicit oracle: phase 0 records the `/proc/version` fingerprint, and the exact-device release gets mined for board dts, defconfig and out-of-tree vendor drivers instead of being assumed buildable.
-- **2026-08-30** — Requirements made explicit: an unlocked bootloader is required — locked devices are out of scope and get pointed at the OEM's own unlocking instructions. Setup also records whether a custom recovery is installed.
-- **2026-08-24** — New `/port-loop` command: an iterate-until-done orchestrator over the four phases.
-- **2026-08-23** — First release: the evidence-first skill for mainline bring-up, with one command per phase.
+- **2026-09-06**
+  - `/port-loop` no longer dies at three refutations. At invocation it asks the operator for a refutation budget — 5, 15, or unlimited — recorded in the ledger header; every third refutation on the same symptom forces a scope widening (the layer above, or the primary artefacts) rather than a stop, and the loop hands back only when a finite budget is spent, the device stops answering, or nothing testable remains. `/flash-gate`'s refutation question reads against that budget when running under the loop.
+  - Reboots are the agent's own when a channel exists: if the device is reachable over ssh, USB or fastboot, the agent reboots and continues; operator hands are reserved for what no channel reaches (battery pull, key combo, physically moving media).
+- **2026-09-05**
+  - Phase 0 now inventories every component against the official spec sheets.
+  - Phase 0 records the storage's own wear/lifetime percentage before anything is diagnosed as failing (measured: that reading overturned a false "storage is dying" verdict; the real fault cleared on one more stock-ROM fastboot flash).
+  - Phase 0 harvests deeper from rooted stock — treated like bootloader unlocking: the user roots the device, the skill never provides the steps.
+  - Phase 0 records the newest community custom ROM as an optional up-to-date source (measured: an unofficial recent-Android build was the most responsive OS seen on one device).
+  - Setup asks for the target userspace shell instead of assuming one, and strongly recommends the distro's own shell where it ships one.
+  - Phase 2 gains a seventh source family: the SoC vendor's mainline collaboration project (e.g. github.com/qualcomm-linux).
+  - Phase 2 invokes its companion skills by name (`linux-kernel-development`/`linux-kernel-crash-debug`, `find-docs`, `wigolo`), each with a plain-tools fallback so the skill still works when none is installed.
+  - Phase 3 gains a strict pre-rebuild gate: patches apply cleanly, every referenced symbol exists in the tree, every config option exists in the kernel's Kconfig (non-existent options are silently ignored), and touched units compile alone — before any full kernel rebuild (measured: four consecutive rebuilds burned on missing symbols in unchecked patches).
+  - Phase 3 gains an edit-precision rule: changes land by reading the exact current lines and writing the exact replacement; an edit needing "repair" is redone from a fresh read, and self-inflicted breakage then hand-fixed is a defect, not a workflow.
+  - Phase 3 gains an operator-hands rule: when a step needs a physical action, name the exact action and its direction and verify it happened from an observable signal before continuing — never proceed on having asked.
+- **2026-08-31**
+  - Phase 2 names the GPL-published OEM kernel sources as an explicit oracle: phase 0 records the `/proc/version` fingerprint, and the exact-device release gets mined for board dts, defconfig and out-of-tree vendor drivers instead of being assumed buildable.
+- **2026-08-30**
+  - Requirements made explicit: an unlocked bootloader is required — locked devices are out of scope and get pointed at the OEM's own unlocking instructions. Setup also records whether a custom recovery is installed.
+- **2026-08-24**
+  - New `/port-loop` command: an iterate-until-done orchestrator over the four phases.
+- **2026-08-23**
+  - First release: the evidence-first skill for mainline bring-up, with one command per phase.
 
 ## License
 

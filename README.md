@@ -10,7 +10,7 @@ So the skill imposes an order on the session:
 
 1. Back up the stock system while it is still readable — it is also your best research source.
 2. Capture evidence from the live device.
-3. Research the problem across seven independent sources.
+3. Research the problem across an ordered, complete list of independent source families.
 4. Only then write a fix, one variable at a time.
 
 Everything in it came out of one real port — mainline Linux on a Xiaomi Mi A3, running NixOS on kernels 7.1 and 7.2 — and every claim was measured on that hardware: which evidence channels survive a wedge and which quietly lose your logs, which observations manufacture the very symptom they are meant to measure, and why the stock DTB pulled off the device beats the sibling SoC's device tree whenever the two disagree. Its evidence notes keep the shape that external review worked against — numbered eliminations, an honest-limits section, and a method block exact enough to repeat — and an outside maintainer's review of those notes, taken as tracked changes, has caught real risks.
@@ -54,12 +54,12 @@ A phone with an **unlocked bootloader**. Locked devices are out of scope — the
 
 ## The four phases
 
-| Phase            | What it enforces                                                                                                                                                                                                                                                                                                                       |
-| ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **0. Set up**    | Unlocked bootloader required. Pin the exact variant, target distro, shell and boot topology, back up every partition but userdata, health-check the storage, inventory the components against the official specs, harvest everything the stock system offers — then mine it all; the stock system is the best research source you get. |
-| **1. Evidence**  | Debug knobs on before you reproduce. Full dmesg. pstore from the path systemd actually leaves it in. Hash what is really flashed instead of trusting your notes.                                                                                                                                                                       |
-| **2. Research**  | All seven source families, every time — whether you are chasing a crash log or building something new. The first plausible hit is not the answer. An empty sweep routes to the primary artefacts — vendor driver, stock DTB, closest mainline sibling — and the design gets derived, not shelved.                                      |
-| **3. Implement** | One variable per flash, hypothesis stated up front, cheap runtime tests over reflashes, and the pre-build battery — patches apply, symbols exist, config options exist, touched units compile — before any full rebuild. Three refutations means your model is wrong: go back to phase 2 — the rule stops the guessing, not the work.  |
+| Phase            | What it enforces                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **0. Set up**    | Unlocked bootloader required. Pin the exact variant, target distro, shell and boot topology, back up every partition but userdata, health-check the storage, inventory the components against the official specs, harvest everything the stock system offers — then mine it all; the stock system is the best research source you get.                                                                                                                                                                        |
+| **1. Evidence**  | Debug knobs on before you reproduce. Full dmesg. pstore from the path systemd actually leaves it in. Hash what is really flashed instead of trusting your notes.                                                                                                                                                                                                                                                                                                                                              |
+| **2. Research**  | Every source family, every time — whether you are chasing a crash log or building something new. The first plausible hit is not the answer. It also sweeps sister devices — same-family models that already have ports — diffing their board files component-by-component against your phase 0 inventory: a match is a proven combination, never a precedent. An empty sweep routes to the primary artefacts — vendor driver, stock DTB, closest mainline sibling — and the design gets derived, not shelved. |
+| **3. Implement** | One variable per flash, hypothesis stated up front, cheap runtime tests over reflashes, and the pre-build battery — patches apply, symbols exist, config options exist, touched units compile — before any full rebuild. Three refutations means your model is wrong: go back to phase 2 — the rule stops the guessing, not the work.                                                                                                                                                                         |
 
 ## Commands
 
@@ -69,7 +69,7 @@ Optional slash commands, one per phase, for when you want a single step rather t
 
 - **`/evidence-sweep`** — _the device just failed._ Turns on the debug knobs, reproduces, and captures everything: dmesg, pstore, console records, a read-back hash of what is actually flashed. Deliberately refuses to diagnose — the output is evidence, nothing more.
 
-- **`/source-sweep`** — _you have evidence and need answers._ Fans out across all seven sources (mainline, the SoC vendor's mainline project, vendor kernel, postmarketOS, Halium/UBports, Mobian, NixOS) and reports what each one said, including the ones that said nothing. Ends with hypotheses ranked by what backs them.
+- **`/source-sweep`** — _you have evidence and need answers._ Fans out across every source family (mainline, the SoC vendor's mainline project, vendor kernel, postmarketOS, Halium/UBports, Mobian, NixOS) and sweeps sister devices for family precedent, then reports what each one said, including the ones that said nothing. Ends with hypotheses ranked by what backs them.
 
 - **`/port-research`** — _you have been asked to build something that has never worked._ The same sweep entered from the other side: no crash log, so the device data is the phase 0 material. Ends with a plan and its sources attached, not a hypothesis about a symptom.
 
@@ -100,32 +100,11 @@ The skill is deliberately device-agnostic: no tool paths, no partition names, no
 - **2026-09-06**
   - `/port-loop` no longer dies at three refutations. At invocation it asks the operator for a refutation budget — 5, 15, or unlimited — recorded in the ledger header; every third refutation on the same symptom forces a scope widening (the layer above, or the primary artefacts) rather than a stop, and the loop hands back only when a finite budget is spent, the device stops answering, or nothing testable remains. `/flash-gate`'s refutation question reads against that budget when running under the loop.
   - `/port-setup` ends by locking the project to the ruleset: it writes an explicit rule into the project's agent context files (`CLAUDE.md`, `AGENTS.md`, equivalents) that all work touching the device goes through the skill's phases and gates — no device action outside the ruleset.
-  - Reboots are the agent's own when a channel exists: if the device is reachable over ssh, USB or fastboot, the agent reboots and continues; operator hands are reserved for what no channel reaches (battery pull, key combo, physically moving media).
-  - Phase 0 sets the project layout: everything large, private or device-derived lives under a gitignored `artifacts/` tree classified by what it is (`private/`, `firmware-harvest/`, `android/`, `debug-evidence/`, `reference/`), publishable firmware goes to a sibling repository with its own history derived only after redaction, `logs/` takes one subdirectory per boot, and a README maps every path to its class with hashes.
-  - Phase 0 proves the control channels before any flash: `adb` and `fastboot` exercised against the device (an untested install is not a channel), plus at least one post-boot channel into the target Linux — USB-gadget Ethernet, serial ACM, ssh over network or USB — recorded with addresses.
-  - A still-bootable Android stays available as an evidence channel for the whole port, not just setup: boot it deliberately when a question is best answered there (a working vendor driver's probe read live next to the mainline failure), but never conclude anything about mainline behaviour from Android behaviour without a cross-check.
-  - The `/port-loop` refutation budget is a per-invocation, per-session choice: asked every time the loop starts, never carried over from a previous session nor recorded as a project setting.
-  - Research per iteration is fresh, not recycled: the refutation narrowing the question does not waive the sweep — `/port-loop` re-runs it against the narrowed framing and each pass must return at least one finding the ledger does not already contain, and `/flash-gate` question 2 now asks when the source was found, refusing a backing that only comes from earlier iterations when the framing has changed.
-  - The operator-hands rule now covers disappearance signals: a power-off, a dropped channel or a gone-silent device is ambiguous between "not done yet" and "done" — the agent must watch the drop as an event or pair the operator's done-confirmation with a failing probe, never read silence alone, and must poll on a short interval and re-ask within a bounded wait instead of freezing on a request the operator may not have registered.
-- **2026-09-05**
-  - Phase 0 now inventories every component against the official spec sheets.
-  - Phase 0 records the storage's own wear/lifetime percentage before anything is diagnosed as failing (measured: that reading overturned a false "storage is dying" verdict; the real fault cleared on one more stock-ROM fastboot flash).
-  - Phase 0 harvests deeper from rooted stock — treated like bootloader unlocking: the user roots the device, the skill never provides the steps.
-  - Phase 0 records the newest community custom ROM as an optional up-to-date source (measured: an unofficial recent-Android build was the most responsive OS seen on one device).
-  - Setup asks for the target userspace shell instead of assuming one, and strongly recommends the distro's own shell where it ships one.
-  - Phase 2 gains a seventh source family: the SoC vendor's mainline collaboration project (e.g. github.com/qualcomm-linux).
-  - Phase 2 invokes its companion skills by name (`linux-kernel-development`/`linux-kernel-crash-debug`, `find-docs`, `wigolo`), each with a plain-tools fallback so the skill still works when none is installed.
-  - Phase 3 gains a strict pre-rebuild gate: patches apply cleanly, every referenced symbol exists in the tree, every config option exists in the kernel's Kconfig (non-existent options are silently ignored), and touched units compile alone — before any full kernel rebuild (measured: four consecutive rebuilds burned on missing symbols in unchecked patches).
-  - Phase 3 gains an edit-precision rule: changes land by reading the exact current lines and writing the exact replacement; an edit needing "repair" is redone from a fresh read, and self-inflicted breakage then hand-fixed is a defect, not a workflow.
-  - Phase 3 gains an operator-hands rule: when a step needs a physical action, name the exact action and its direction and verify it happened from an observable signal before continuing — never proceed on having asked.
-- **2026-08-31**
-  - Phase 2 names the GPL-published OEM kernel sources as an explicit oracle: phase 0 records the `/proc/version` fingerprint, and the exact-device release gets mined for board dts, defconfig and out-of-tree vendor drivers instead of being assumed buildable.
-- **2026-08-30**
-  - Requirements made explicit: an unlocked bootloader is required — locked devices are out of scope and get pointed at the OEM's own unlocking instructions. Setup also records whether a custom recovery is installed.
-- **2026-08-24**
-  - New `/port-loop` command: an iterate-until-done orchestrator over the four phases.
-- **2026-08-23**
-  - First release: the evidence-first skill for mainline bring-up, with one command per phase.
+  - Phase 0 sets the project layout, proves the control channels before any flash, decodes A/B slot state from the on-disk structure, and requires a media-failure verdict to survive a later-session re-probe before it retires a device.
+  - Phase 1: the kernel ACM console must be verified against its reporting context (and tested with a crash injector) before spending a flash; ramoops rot includes warm reboots; unchanging status registers are latches until proven live; channel loss after suspend/resume is three-valued.
+  - Phase 2 gains a sister-device sweep, and reads DSP silence as a possibly unanswered callback; patches are re-verified against every downstream DT held.
+
+Full history in [CHANGELOG.md](CHANGELOG.md).
 
 ## License
 

@@ -112,13 +112,6 @@ The skill is deliberately device-agnostic: no tool paths, no partition names, no
   - **Phase 3 — implementation:** pristine ordered patch checks, inert moves separated from upgrades, complete image assembly, real-reboot acceptance and rollback-preserving measured cleanup. Adds per-artifact build scoping and status, transactional fail-closed source preparation, deployment as a state machine with separately observed postconditions, and FAIL-never-SKIP revalidation of required probes.
   - **Maintenance:** `/linux-phone-porting-update` and safe installation migration; no destructive reset advice. Details and measurement caveats are in the [full changelog](CHANGELOG.md).
 
-- **2026-09-06**
-  - `/port-loop` no longer dies at three refutations. At invocation it asks the operator for a refutation budget — 5, 15, or unlimited — recorded in the ledger header; every third refutation on the same symptom forces a scope widening (the layer above, or the primary artefacts) rather than a stop, and the loop hands back only when a finite budget is spent, the device stops answering, or nothing testable remains. `/flash-gate`'s refutation question reads against that budget when running under the loop.
-  - `/port-setup` ends by locking the project to the ruleset: it writes an explicit rule into the project's agent context files (`CLAUDE.md`, `AGENTS.md`, equivalents) that all work touching the device goes through the skill's phases and gates — no device action outside the ruleset.
-  - Phase 0 sets the project layout, proves the control channels before any flash, decodes A/B slot state from the on-disk structure, and requires a media-failure verdict to survive a later-session re-probe before it retires a device.
-  - Phase 1: the kernel ACM console must be verified against its reporting context (and tested with a crash injector) before spending a flash; ramoops rot includes warm reboots; unchanging status registers are latches until proven live; channel loss after suspend/resume is three-valued.
-  - Phase 2 gains a sister-device sweep, and reads DSP silence as a possibly unanswered callback; patches are re-verified against every downstream DT held.
-
 Full history in [CHANGELOG.md](CHANGELOG.md).
 
 ## License

@@ -106,10 +106,10 @@ The skill is deliberately device-agnostic: no tool paths, no partition names, no
 ## Changelog
 
 - **2026-09-12**
-  - **Phase 0 — setup:** layered source/artifact layout, scoped private material, exact product identity and transports, operation-specific boot/fetch checks, verified recovery, and separate declared, bound and exercised capability claims.
+  - **Phase 0 — setup:** layered source/artifact layout, scoped private material, exact product identity and transports, operation-specific boot/fetch checks, verified recovery, and separate declared, bound and exercised capability claims. Transport binding now also constrains the host: reachability probes never mutate host network state, and a ping is not target identity.
   - **Phase 1 — evidence:** acquisition integrity and coverage, exact deployed identity, and functional readiness separated from acoustic qualification.
   - **Phase 2 — research:** AOSP and OEM/ODM aliases and archives, exact-source security evidence and portable reproductions, plus optional `graft` navigation.
-  - **Phase 3 — implementation:** pristine ordered patch checks, inert moves separated from upgrades, complete image assembly, real-reboot acceptance and rollback-preserving measured cleanup.
+  - **Phase 3 — implementation:** pristine ordered patch checks, inert moves separated from upgrades, complete image assembly, real-reboot acceptance and rollback-preserving measured cleanup. Adds per-artifact build scoping and status, transactional fail-closed source preparation, deployment as a state machine with separately observed postconditions, and FAIL-never-SKIP revalidation of required probes.
   - **Maintenance:** `/linux-phone-porting-update` and safe installation migration; no destructive reset advice. Details and measurement caveats are in the [full changelog](CHANGELOG.md).
 
 - **2026-09-06**

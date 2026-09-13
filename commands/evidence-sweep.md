@@ -7,7 +7,7 @@ Run phase 1 of the `linux-phone-porting` skill against the device for: $ARGUMENT
 
 **Precondition:** phase 0 must establish the target and its control channels. If identity or transport selection is unresolved, run `/port-setup` first. Re-enumerate after mode changes and pin acquisition to the reconciled target, not the first connected device.
 
-Do not propose a fix in this command. The output is evidence, not a diagnosis.
+**Skills:** invoke `linux-kernel-development` if installed, else `linux-kernel-crash-debug`, else any subsystem-specific kernel skill — reading the failing dmesg, choosing debug knobs, and interpreting probe/ramoops/pstore behaviour need its register-level detail; if none is installed, reason from the kernel sources and `Documentation/` directly. Do not propose a fix in this command. The output is evidence, not a diagnosis.
 
 1. **Before reproducing**, enable the debug knobs relevant to the suspected subsystem (`debug_mask`, dynamic debug, `drm.debug`, tracepoints). A second reproduction costs another boot, so turn everything on now.
 2. Capture the full dmesg of the failing run to a file on the host. Record exact runtime identity with it: device/board revision, active boot target, kernel version and build identity, DTB, modules, firmware and userspace revisions as observable; distinguish verified identifiers from expected build inputs.

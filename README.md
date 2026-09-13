@@ -85,15 +85,46 @@ Optional slash commands for individual phases, the full loop, and separate insta
 
 `/source-sweep` and `/port-research` are the same phase approached from opposite directions — one starts from a symptom, the other from a request — and both feed `/flash-gate`. Each command states its own precondition, so you can start anywhere.
 
+## Recommended folder structure
+
+Phase 0 sets the working conventions, including where everything lives. The reference layout for a multi-device workspace is layered — each layer owns one kind of decision, and dependencies point one way only:
+
+```text
+kernel/<version>/     Clean upstream source + generic builder
+soc/<vendor-soc>/     SoC-common patches, configuration and packages
+os/<distro>/          Device-neutral OS integration and tools
+devices/<model>/      Device assembly, patches, calibration and state
+```
+
+- **Dependency direction:** `kernel → soc → os → devices`. Bases never import device layers; device-shaped input enters shared layers only through function arguments.
+- **Bases stay clean.** No device patches, no device names in `kernel/`, `soc/` or `os/`. A shared kernel working tree used for experiments is marked as patched, never mistaken for pristine upstream.
+- For a single-device port this is the reference shape, not a requirement to restructure — put the layers in whatever directories the port already has, and keep the ownership boundaries.
+
+**Everything large, private, or device-derived lives under `artifacts/` at the device project root** — gitignored, never committed, never unignored — classified by what it is:
+
+```text
+artifacts/
+  private/           Device-unique material that never leaves the machine
+                     (the partition backup first of all, with a
+                     DO-NOT-RESTORE note for userdata inside it)
+  firmware-harvest/  Extracted blobs pending redaction
+  android/           Reproducible stock-ROM packages and rooted captures
+  debug-evidence/    Irreplaceable captures and preregistrations
+  reference/         Reading copies of upstream sources
+logs/                One subdirectory per boot
+```
+
+Publishable firmware is different: it goes to a sibling `firmware-publishable/` repository with its own git history, derived only after redaction. A README at the device project root maps every path to its class, with hashes.
+
 ## Pairs well with
 
 The skill invokes companion skills **by name**, each with a plain-tools fallback when it is not installed. Nothing breaks if you install none of them — the skill works end-to-end on base capabilities — but research and source navigation get better with them:
 
-- **`linux-kernel-development`** (fallback: `linux-kernel-crash-debug`, then any subsystem-specific kernel skill) — to work out which driver, binding or firmware interface owns a failure. Without any of them, the agent reasons through the driver sources directly.
+- **`linux-kernel-development`** (fallback: `linux-kernel-crash-debug`, then any subsystem-specific kernel skill) — to work out which driver, binding or firmware interface owns a failure, to read a failing dmesg and choose debug knobs during evidence capture, and to reason about a change during implementation. Without any of them, the agent reasons through the driver sources and `Documentation/` directly.
 
-- **`find-docs`** (Context7-backed) — current API and configuration details on the userspace libraries involved, rather than recalled signatures. Without it, the agent reads the project's docs over the web.
+- **`find-docs`** (Context7-backed) — current documentation rather than recalled signatures: kernel-side too (DT bindings, Kconfig, subsystem docs for the exact kernel version being built), the userspace libraries involved, and the build/image tooling before any assembly. Without it, the agent reads the project's docs over the web, or the kernel tree's `Documentation/` for kernel interfaces.
 
-- **`wigolo`** — for the phase 2 sweep; its local cache is the part that matters, since consecutive sessions re-read the same handful of pages. Without it, the agent uses plain web search.
+- **`wigolo`** — for the phase 2 source sweep and phase 0's spec-sheet and custom-ROM lookups; its local cache is the part that matters, since consecutive sessions of a port re-read the same handful of pages. Without it, the agent uses plain web search.
 
 - **`graft`** — optional navigation for an indexed source tree: locate symbols, callers and relevant spans before broad searches. The exact checked-out source remains authoritative; an index or summary is a pointer, not patch evidence. Without it, use direct source search and reads.
 

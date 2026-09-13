@@ -13,7 +13,7 @@ Run phase 2 of the `linux-phone-porting` skill for: $ARGUMENTS
 Load these skills by name, in this order — invoke each; if it is not installed, skip it and use the fallback (the skill works without them):
 
 - `linux-kernel-development` (else `linux-kernel-crash-debug`), to identify the owning driver, binding, or firmware interface — fallback: reason through the driver sources directly.
-- `find-docs`, for any userspace library or tool involved — fallback: read the project's current documentation over the web.
+- `find-docs`, for any library, tool, or kernel interface involved — kernel-side too: the identified driver's DT binding, Kconfig options and subsystem documentation for the exact kernel version being built — fallback: read the project's current documentation over the web, or `Documentation/` in the kernel tree for kernel interfaces.
 - `wigolo`, for the source sweep — its cache matters, since these pages get re-read across sessions; fallback: plain web search.
 
 Then run **phase 2 in full**: its ordered source families, identity/codename and archive searches, version-matched advisory/source checks, and optional `graft` navigation are authoritative in `SKILL.md`, not duplicated here. Use parallel subagents where possible. The point is that the fix comes from all sources, not the first plausible hit. One authority rule repeated here because it decides the sweep's outcome: the stock DTB read off this device wins wherever any source — including the sibling SoC's dtsi and the OEM tree's board dts — disagrees.

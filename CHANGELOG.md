@@ -1,5 +1,12 @@
 # Changelog
 
+- **2026-09-13**
+  - **Companion-skill discipline.** Widens where the named companion skills are invoked so no phase relies on recalled facts:
+    - `find-docs` now also covers kernel-side documentation (the identified driver's DT binding/dt-schema, Kconfig options and subsystem docs for the exact kernel version being built, fallback: the tree's `Documentation/`) in phase 2 step 1, and the build/image tooling (kernel build system, `mkbootimg`/`mkdtboimg` header constraints, the distro image builder) as the first step of phase 3's full-rebuild battery. Mirrored in `/source-sweep` and `/flash-gate`.
+    - The kernel skill (`linux-kernel-development`, else `linux-kernel-crash-debug`) is now also invoked in phase 1: reading a failing dmesg, choosing debug knobs and interpreting probe/ramoops/pstore behaviour need its register-level detail. Mirrored in `/evidence-sweep`.
+    - `wigolo` is now also invoked for phase 0's spec-sheet and custom-ROM web lookups, where its cross-session cache matters most. Mirrored in `/port-setup`. `graft` is unchanged.
+  - **README** adds a "Recommended folder structure" section: the layered multi-device layout, the dependency direction and clean-base rules, and the gitignored `artifacts/` classification with the sibling `firmware-publishable/` repository.
+  - README's "Pairs well with" descriptions updated to match the widened invocation scopes.
 - **2026-09-12**
   - **Phase 0 — Setup**
     - Adds a reference layout for multi-device workspaces: `kernel/<version>/` for clean upstream source and a generic builder, `soc/<vendor-soc>/` for common patches, configuration and packages, `os/<distro>/` for device-neutral integration and tools, and `devices/<model>/` for device assembly, patches, calibration and state. Shared bases never import device policy; single-device ports need not reorganize.

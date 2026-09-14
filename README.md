@@ -136,15 +136,8 @@ The skill is deliberately device-agnostic: no tool paths, no partition names, no
 
 ## Changelog
 
-- **2026-09-13**
-  - **Companion-skill discipline:** `find-docs` now also covers kernel-side docs (bindings, Kconfig, subsystem docs for the exact kernel version) and the build/image tooling before any assembly; the kernel skill is also invoked during phase 1 evidence reasoning; `wigolo` also covers phase 0's spec-sheet and custom-ROM lookups. All with the same plain-tools fallbacks.
-  - **README:** adds the recommended folder-structure section. Details and measurement caveats are in the [full changelog](CHANGELOG.md).
-- **2026-09-12**
-  - **Phase 0 — setup:** layered source/artifact layout, scoped private material, exact product identity and transports, operation-specific boot/fetch checks, verified recovery, and separate declared, bound and exercised capability claims. Transport binding now also constrains the host: reachability probes never mutate host network state, and a ping is not target identity.
-  - **Phase 1 — evidence:** acquisition integrity and coverage, exact deployed identity, and functional readiness separated from acoustic qualification.
-  - **Phase 2 — research:** AOSP and OEM/ODM aliases and archives, exact-source security evidence and portable reproductions, plus optional `graft` navigation.
-  - **Phase 3 — implementation:** pristine ordered patch checks, inert moves separated from upgrades, complete image assembly, real-reboot acceptance and rollback-preserving measured cleanup. Adds per-artifact build scoping and status, transactional fail-closed source preparation, deployment as a state machine with separately observed postconditions, and FAIL-never-SKIP revalidation of required probes.
-  - **Maintenance:** `/linux-phone-porting-update` and safe installation migration; no destructive reset advice. Details and measurement caveats are in the [full changelog](CHANGELOG.md).
+- **2026-09-14**
+  - **Phase 0 — backup and channels:** EDL (emergency download) mode added as the provable fallback backup route when boot-based channels cannot read partitions; a firehose's advertised command list is not a working data path — a self-test read with a byte-count check is required before any bulk dump; and a bulk dump loop must abort at the first zero-byte or short read. The community-custom-ROM source note now also covers the EDL bundle's programmer and partition map. Details and measurement caveats are in the [full changelog](CHANGELOG.md).
 
 Full history in [CHANGELOG.md](CHANGELOG.md).
 

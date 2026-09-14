@@ -1,5 +1,12 @@
 # Changelog
 
+- **2026-09-14**
+  - **Phase 0 — backup and channels.**
+    - Adds EDL (emergency download) mode as the fallback backup route when boot-based channels (fastboot/adb) cannot read partitions. A signed firehose programmer — from the OEM's EDL package or a community custom ROM's EDL bundle — grants raw storage access, and its rawprogram XML doubles as an independent partition map to cross-check against the on-device GPT. Programmer binaries come in per-variant revisions; a mismatched one can configure cleanly and still not stream.
+    - Extends "prove the operation, not just the connection": a firehose that connects over Sahara, configures cleanly and advertises the full `read` command set still truncated every streamed read to 16 bytes of a 17,408-byte request — on the stock tool and two custom driver revisions alike. An advertised command list is not a working data path; run a self-test read against a small known-content region and verify the returned bytes, not just a clean XML acknowledgement, before scripting any bulk transfer.
+    - Adds abort-on-first-failure to bulk dump loops: a run whose partition-table read itself returned zero bytes went on to record per-partition failures for the whole list (~50 void entries) before the transfer was diagnosed. Probe the smallest read (the GPT) first; treat the first zero-byte or short read as fatal.
+    - The community-custom-ROM source note now also covers the EDL bundle's signed programmer and rawprogram partition map.
+  - README's changelog section now carries only the newest entry; full history stays here.
 - **2026-09-13**
   - **Companion-skill discipline.** Widens where the named companion skills are invoked so no phase relies on recalled facts:
     - `find-docs` now also covers kernel-side documentation (the identified driver's DT binding/dt-schema, Kconfig options and subsystem docs for the exact kernel version being built, fallback: the tree's `Documentation/`) in phase 2 step 1, and the build/image tooling (kernel build system, `mkbootimg`/`mkdtboimg` header constraints, the distro image builder) as the first step of phase 3's full-rebuild battery. Mirrored in `/source-sweep` and `/flash-gate`.

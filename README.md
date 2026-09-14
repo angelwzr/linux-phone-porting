@@ -1,7 +1,7 @@
 # linux-phone-porting
 
 <p align="center">
-  <img src="logo.png" alt="linux-phone-porting logo" width="360">
+  <img src="logo.png" alt="linux-phone-porting logo" width="100%">
 </p>
 
 An agent skill for porting mainline Linux to a phone. It makes your coding agent gather evidence and do research **before** it writes a fix.

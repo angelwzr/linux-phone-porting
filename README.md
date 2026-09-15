@@ -102,9 +102,8 @@ Optional slash commands for individual phases, the full loop, and separate insta
 
 - **`/port-loop`** — _you want a capability working and are happy to let the agent iterate._ Asks for a refutation budget (5, 15, or unlimited), then researches, gates, applies authorized tests, verifies and records. Every third refutation widens scope. Pauses, physical limits and permission boundaries bind unlimited loops too; protected writes and userdata loss require separate authorization. Completion records distinguish target success from unresolved faults and preserve history.
 
-- **`/linux-phone-porting-update`** — _you explicitly want to maintain the installed skill._ Verifies install provenance and channel, reviews the fetched changelog, fast-forwards a clean Git installation to the inspected revision, and reconciles companion links without overwriting local work. Runs outside the hardware phases; never self-updates from `/port-loop`.
-
 - **`/port-upstream`** — _a fix or capability is portable and worth offering upstream._ Checks whether the work already exists (adopting it counts as success), reads each destination's current submission rules, prepares and verifies the series against the real base, and hands you a reviewed bundle with suggested messages. You own all maintainer interaction; the command tracks prepared → submitted → accepted → merged → released in a ledger and turns review feedback into revisions.
+- **`/linux-phone-porting-update`** — _you explicitly want to maintain the installed skill._ Verifies install provenance and channel, reviews the fetched changelog, fast-forwards a clean Git installation to the inspected revision, and reconciles companion links without overwriting local work. Runs outside the hardware phases; never self-updates from `/port-loop`.
 
 `/source-sweep` and `/port-research` are the same phase approached from opposite directions — one starts from a symptom, the other from a request — and both feed `/flash-gate`. Each command states its own precondition, so you can start anywhere.
 

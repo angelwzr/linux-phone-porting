@@ -15,10 +15,11 @@ This is `/source-sweep` entered from the other side. Use it when the request is 
 
 - Who owns the hardware for it — a kernel driver, a firmware applet, or DSP-side code — answered by scanning the phase 0 images for the peripheral's symbols rather than assumed from the kernel side. A kernel-side shim with the real driver in firmware turns the plan from porting a driver into loading one.
 - What mainline already provides — its exported API, whether it reaches userspace or is kernel-internal only, and its gates (machine allowlists, pre-loaded semantics, built-in rather than module) — and what is missing.
-- What the vendor stack does instead, from the stock DTB and Halium/UBports configs — the interface any mainline path will have to satisfy.
-- Which other distro has done this on this SoC, and what they had to add.
+- What the vendor stack does instead, from the stock DTB, vendor implementations and applicable port configurations, and how that differs from the selected target OS's hardware-service contract.
+- The affected component and document records, reconciled connections and unresolved identity/wiring/access gaps from the delegated phase 2 sweep; separate declared topology from demonstrated operation.
+- Which other project or port has implemented this capability on this SoC, what it added, and how its tested configuration differs from this target.
 - Which same-family devices — sibling models sold under the same marketing name — already have ports, and which of their components match this variant's phase 0 inventory. Matching components carry proven driver-plus-firmware combinations; adopt one only after the component diff confirms it against this variant's spec sheet and stock DTB.
-- If no distro has, say so plainly and derive the plan from the primary artefacts instead — the vendor driver source, the stock DTB, the closest mainline sibling driver. Absence of precedent is the normal state of a bring-up, not a dead end.
+- If no applicable implementation was found, state the searched coverage and access gaps, not universal absence. Derive the plan from the primary artefacts instead — the vendor driver source, the stock DTB, the closest mainline sibling driver. Missing precedent is not a dead end.
 - The smallest first change that would produce a legible result, stated with its falsifier — the cheapest experiment whose result kills the plan either way. That probe is built before anything larger.
 - Any shared defect blocking the plan, with exact affected/fixed revisions, captured or proposed boundary reproduction clearly distinguished, and qualified advisory/CVE applicability. Record whether a candidate fix is submitted, accepted, merged or released rather than treating these as equivalent.
 

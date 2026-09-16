@@ -1,5 +1,8 @@
 # Changelog
 
+- **2026-09-16**
+  - **LKML as a research source.** Adds the kernel mailing-list archives (lore.kernel.org), Patchwork state and subsystem/linux-next trees as a phase 2 source family, placed after the SoC vendor's mainline collaboration project. Resolves a fix's state — merged, in flight, reworked or rejected — before porting or re-deriving it, checks whether it landed in the kernel lineage being built (otherwise it is a backport candidate, not an existing fix), and recovers patch-thread rationale, hardware context and register detail that commit messages drop. README's comparison table gains the family alongside vendor mainline.
+
 - **2026-09-15**
   - **Inventory and hardware research.** Requires a persistent component–wiring–document inventory with stable links, exact/partial identities, connections, evidence, document gaps and separate port qualification. Preserves alternative populations, integrated functions and unresolved identities rather than inventing a complete physical BOM. One research pack linked 134 component/subsystem records to 47 document records.
   - **Document discovery and provenance.** Adds a component-document pass across manufacturer documentation, OEM/ODM schematics/service material, FCC exhibits, repair archives and Scribd original-document search without removing or reordering the existing software-source families. Distinguishes document kinds, applicability and actual access; validates original content over generated titles; deduplicates identical downloads and keeps third-party document collections local.

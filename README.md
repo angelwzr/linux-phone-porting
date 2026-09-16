@@ -149,6 +149,7 @@ The skill invokes companion skills **by name**, each with a plain-tools fallback
 - **`wigolo`** — for the phase 2 source sweep and phase 0's spec-sheet and custom-ROM lookups; its local cache is the part that matters, since consecutive sessions of a port re-read the same handful of pages. Without it, the agent uses plain web search.
 
 - **`graft`** — optional navigation for an indexed source tree: locate symbols, callers and relevant spans before broad searches. The exact checked-out source remains authoritative; an index or summary is a pointer, not patch evidence. Without it, use direct source search and reads.
+- **`lei`** (public-inbox CLI, not an agent skill) — optional local query interface for the lore.kernel.org archives named in phase 2: diff-targeted prefixes (`dfn:` filename, `dfhh:` hunk header) reach patch threads touching an exact driver file or function, and saved searches (`lei q` / `lei up`) follow a subsystem while a port iterates. Without it, the lore web interface is the fallback.
 
 Any skill covering the same capability can substitute — the names are the defaults the skill tries first, not hard dependencies.
 
@@ -160,6 +161,7 @@ The skill is deliberately device-agnostic: no tool paths, no partition names, no
 
 - **2026-09-16**
   - **Research sources:** LKML patch archives (lore.kernel.org, Patchwork, subsystem and linux-next trees) added as a phase-2 source family — resolve a fix's merged/in-flight/rejected state before porting or re-deriving it, check it landed in the kernel lineage being built, and recover thread-only rationale and register detail that commit messages drop.
+  - **Local patch search:** the optional `lei` CLI queries the LKML archive locally — diff-targeted prefixes (`dfn:`, `dfhh:`) reach threads touching an exact driver file or function; saved searches follow a subsystem across sessions. Lore web search remains the fallback.
 
 Full history in [CHANGELOG.md](CHANGELOG.md).
 

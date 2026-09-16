@@ -2,6 +2,7 @@
 
 - **2026-09-16**
   - **LKML as a research source.** Adds the kernel mailing-list archives (lore.kernel.org), Patchwork state and subsystem/linux-next trees as a phase 2 source family, placed after the SoC vendor's mainline collaboration project. Resolves a fix's state — merged, in flight, reworked or rejected — before porting or re-deriving it, checks whether it landed in the kernel lineage being built (otherwise it is a backport candidate, not an existing fix), and recovers patch-thread rationale, hardware context and register detail that commit messages drop. README's comparison table gains the family alongside vendor mainline.
+  - **Local patch search.** The LKML family names the optional `lei` CLI (public-inbox) for querying the same archive locally: diff-targeted prefixes (`dfn:`, `dfhh:`) reach threads touching an exact driver file or function, and saved searches (`lei q` / `lei up`) follow a subsystem while the port iterates. The lore web interface stays the fallback when lei is absent; README lists lei under "Pairs well with".
 
 - **2026-09-15**
   - **Inventory and hardware research.** Requires a persistent component–wiring–document inventory with stable links, exact/partial identities, connections, evidence, document gaps and separate port qualification. Preserves alternative populations, integrated functions and unresolved identities rather than inventing a complete physical BOM. One research pack linked 134 component/subsystem records to 47 document records.

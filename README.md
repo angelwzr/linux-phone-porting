@@ -160,7 +160,9 @@ The skill is deliberately device-agnostic: no tool paths, no partition names, no
 ## Changelog
 
 - **2026-09-18**
-  - **Boot-model classes:** the skill now covers phones and tablets — phase 0 classifies each target as retail-unlock, exploit-booted or firmware-boot, and the write gate, backup route and board-authority artefact (boot-image DTB / ACPI tables / DT inside the vendor kernel image) follow the class; three phase-2 source families join the sweep after AOSP (Apple-platform mainline, Windows-on-ARM/UEFI ARM, Windows-Phone-lineage tooling) and the evidence channel generalizes to "keep the retail OS bootable".
+  - **Boot-model classes:** phase 0 classifies the target as retail-unlock, exploit-booted (bootROM-vulnerable payload chains) or firmware-boot (UEFI) — the write gate, backup route and board-authority artefact (boot-image DTB / ACPI tables / DT inside the vendor kernel image) follow the class. Phones and tablets both in scope.
+  - **New source families:** Apple-platform mainline enablement (Asahi Linux, `m1n1` device forks, checkm8/pongoOS), Windows-on-ARM/UEFI ARM enablement, and Windows-Phone-lineage conversion/unlock tooling — added after AOSP, none dropped or reordered.
+  - **Retail-OS-neutral evidence:** "keep a bootable Android" generalizes to "keep the retail OS bootable for data gathering"; requirements now ask for a demonstrated boot path per class.
 
 - **2026-09-16**
   - **Research sources:** LKML patch archives (lore.kernel.org, Patchwork, subsystem and linux-next trees) added as a phase-2 source family — resolve a fix's merged/in-flight/rejected state before porting or re-deriving it, check it landed in the kernel lineage being built, and recover thread-only rationale and register detail that commit messages drop.

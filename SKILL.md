@@ -1,13 +1,13 @@
 ---
 name: linux-phone-porting
-description: Use for every hardware bring-up or debug session that ports mainline Linux to a phone (Android handset). Requires an already-unlocked bootloader; locked devices are out of scope.
+description: Use for every hardware bring-up or debug session that ports mainline Linux to a phone or tablet. Retail-unlock targets require an already-unlocked bootloader; locked retail bootloaders are out of scope. Exploit-booted and firmware-booted targets require a demonstrated boot path; the skill never provides unlock or exploit steps.
 ---
 
 # Linux Phone Porting
 
 A debug iteration costs a build + flash + boot (5-10 min); blind fixes get refuted more often than they land. Follow this order strictly.
 
-Scope: mainline Linux bring-up on phones plus integration of the selected OS userspace — a method, not certification of any OS/device combination. The userspace need not be GNU/Linux; non-Linux kernels are out of scope.
+Scope: mainline Linux bring-up on phones and tablets plus integration of the selected OS userspace — a method, not certification of any OS/device combination. The userspace need not be GNU/Linux; non-Linux kernels are out of scope.
 
 ## 0. Set up the port
 
@@ -19,12 +19,16 @@ Once, before the first flash. The stock system is the highest-authority research
 - **Engineering stage** — EVT/DVT/PVT, board identity, carrier/SKU, bootloader product + build fingerprints. Reconcile before choosing images: one presumed retail handset was an EVT board for a different product while Android reported `user/release-keys`. Build labels do not establish production hardware.
 - **Target OS/platform and integration contract** — chosen release, required kernel lineage, startup/service manager, hardware-service interfaces, build/image/update model, evidence/control tools; verify against the target project's current docs. Linux-based ≠ mainline-compatible; a working Linux driver ≠ target-framework or application support.
 - **Target user interface/session** — ask when unspecified; never assume. Prefer the platform's supported interface/session stack over replacing it during bring-up.
-- **Boot topology** — A/B or not, slot layout, lock state. Decode slot state from the on-disk structure, not documented layouts (one SoC kept it in GPT partition-entry attribute bits, not the documented control partition). After a crash-loop, refill the tries-remaining budget before interpreting the next failure. **Unlocked bootloaders only** — no unlocking steps; point at the OEM's instructions and resume when unlocked.
+- **Boot-model class** — classify before anything else about boot; the class selects the write gate, the backup route and the board-authority artefact (boot-image DTB / ACPI tables / DT inside the vendor kernel image):
+  - **Retail-unlock** — OEM unlock, boot images, A/B slots. **Unlocked bootloader only** — no unlocking steps; point at the OEM's instructions and resume when unlocked.
+  - **Exploit-booted** — bootROM-vulnerable devices; no unlock state exists. Gate: a payload boot path demonstrated on this device; the payload environment is a candidate control channel and recovery path — prove both. No exploit-landing steps; point at the payload project's own instructions.
+  - **Firmware-boot** — UEFI or equivalent; lock state is often irrelevant to booting external media, but record it where the chain has one — some UEFI-lineage chains gate writes through their own unlock state and service tooling; where it gates writes, apply the retail-unlock gate to it. Gate: a demonstrated boot path. The board description may be ACPI tables, not a DTB.
+- **Boot topology** — A/B or not, slot layout. Decode slot state from the on-disk structure, not documented layouts (one SoC kept it in GPT partition-entry attribute bits, not the documented control partition). After a crash-loop, refill the tries-remaining budget before interpreting the next failure.
 - **Recovery** — custom recovery installed? Convenience, not requirement.
 
 Vendor A/B bank names do not establish seamless-update/slot/fallback semantics — establish the implementation before manipulating banks. Empty security properties = unknown, not unlocked. Same-SoC trees/firmware/signed programmers are candidates, not certified recovery paths; an unreleased prototype's only installed system may have no compatible replacement — preserve it, restorable backup before destructive experiments.
 
-**Back up every partition except userdata:**
+**Back up every readable partition except userdata** — a class that exposes no partitions is backed up through its demonstrated route (payload environment, preboot environment, full-storage image) with coverage recorded as it is:
 
 - Userdata excluded: bulk, private — leave a DO-NOT-RESTORE note in the backup. Exclusion does not authorize its loss; before any operation that may wipe it, explain consequences + preservation options and obtain separate informed authorization.
 - **Device-unique partitions — back up, never publish.** Modem NV/EFS, persist, calibration siblings carry IMEI, radio calibration, sensor trim; unreproducible; corruption leaves a phone that cannot register. Critical AND private.
@@ -36,8 +40,8 @@ Vendor A/B bank names do not establish seamless-update/slot/fallback semantics �
 
 **Research value of the backup:**
 
-- **Stock DTB** — board-specific configuration authority over a sibling SoC's dtsi once the variant/overlay is established; not proof of fitted silicon, physical wiring or measured voltages. Preserve conflicts until resolved.
-- **Firmware blobs + load order**, **vendor kernel cmdline + boot image layout** (offsets, header version, args), **exact kernel version string** (`uname -a` / `/proc/version` — selects the right GPL OEM release in phase 2; vendors ship several, they differ), **vendor configs** (sensor/modem/HAL interfaces mainline must satisfy).
+- **Stock board description — boot-image DTB, ACPI tables, or the DT carried inside the vendor kernel image, per boot-model class** — board-specific configuration authority over a sibling SoC's dtsi once the variant/overlay is established; not proof of fitted silicon, physical wiring or measured voltages. Preserve conflicts until resolved.
+- **Firmware blobs + load order**, **vendor kernel cmdline + boot-image layout where the class has one** (offsets, header version, args), **exact kernel version string** (`uname -a` / `/proc/version` — selects the right GPL OEM release in phase 2; vendors ship several, they differ), **vendor configs** (sensor/modem/HAL interfaces mainline must satisfy).
 
 **Check storage health before trusting device reports:**
 
@@ -48,8 +52,8 @@ Vendor A/B bank names do not establish seamless-update/slot/fallback semantics �
 
 - **Inventory every component the stock system names** — panel, touch, sensors, cameras, modem + RF config, WLAN/BT, charger + fuel gauge, audio — and compare against this variant's official spec sheets: `find-docs` for component docs, `wigolo` for web-found material (its cache matters across sessions); else plain web search. Sibling variants differ exactly here.
 - **Evidence level** — declared / enumerated / driver-bound / exercised, no implied progression. A HAL name can reflect software ancestry, not silicon; installed firmware may cover unfitted components. One camera advertised 1080p30 in USB descriptors while Android exposed at most 1024×768 and 27 fps; no frames captured, so throughput was never measured.
-- **Rooted stock beats a ROM image.** Root keeps the system readable: `getprop`, `/proc/config.gz`, mounted vendor/odm trees, HAL/sensor configs, calibration artefacts, factory field-test modes. User roots it themselves — no rooting steps; resume when root exists.
-- **Record the newest community custom ROM** as an optional development source: the most responsive OS ever run on one device was an unofficial recent-Android build, and its boot image shares the stock downstream lineage, so its DTB cross-checks the phase 0 extraction. A bundled EDL package also carries the signed programmer + rawprogram map.
+- **Readable retail beats a ROM image.** On Android that is root: `getprop`, `/proc/config.gz`, mounted vendor/odm trees, HAL/sensor configs, calibration artefacts, factory field-test modes. Other retail OSes have their own readable surfaces — enumerate what this one exposes and harvest it through them. Privilege steps are the user's — no rooting or jailbreaking steps; resume when access exists.
+- **Record the newest community custom OS** (on Android: custom ROM) as an optional development source: the most responsive OS ever run on one device was an unofficial recent-Android build, and its boot image shares the stock downstream lineage, so its DTB cross-checks the phase 0 extraction. A bundled EDL package also carries the signed programmer + rawprogram map.
 
 **Keep a persistent component–wiring–document inventory**, seeded from stock, extended in phase 2, in the project's existing format. One research pack linked 134 component/subsystem records to 47 document records — not 134 fitted chips. Per component record:
 
@@ -82,7 +86,7 @@ Shared bases never import device policy; device facts, private captures, per-dev
 
 Write into the project's agent context files: all work touching this device goes through this ruleset; no device action outside it. Existing backup? Confirm coverage + hashes still verify.
 
-**Keep a bootable Android for data gathering.** Read a working vendor driver's probe/firmware sequence live next to a mainline failure; exercise hardware mainline cannot yet drive. Never conclude mainline behaviour from Android without a cross-check.
+**Keep the retail OS bootable for data gathering** (Android in the founding port; same principle wherever the class retains one). Read a working vendor driver's probe/firmware sequence live next to a mainline failure; exercise hardware mainline cannot yet drive. Never conclude mainline behaviour from retail-OS behaviour without a cross-check.
 
 ## 1. Gather evidence from the live device first
 
@@ -101,7 +105,7 @@ Carry phase 0 evidence labels into findings. Record running vs deployed identiti
 ### Evidence channels, roughly by reliability
 
 - **Live shell** (network/USB) — cheapest; anything the device survives.
-- **Bootable Android** — boot deliberately when a question is best answered there; cross-check before transferring conclusions.
+- **Bootable retail OS** (Android where retained) — boot deliberately when a question is best answered there; cross-check before transferring conclusions.
 - **pstore.** Identify the active crash-record collector, its config and archive destination. Inspect the mounted kernel interface (`/sys/fs/pstore/` where used) and any collector archive — when `systemd-pstore.service` has collected records its configured archive must be harvested too (one system moved everything to `/var/lib/systemd/pstore/` early in boot). Merely running systemd proves nothing about collection; an empty kernel directory alone proves no absence of a crash. Console region is usually a single slot — copy to host first or the next crash overwrites it.
 - **ramoops.** Lossy: DRAM charge retention decays unpowered — measured ~6.5 % of bits on one device, enough to fail ECC on zone headers and lose records — and warm reboots rot it too (tens of blocks). Decay follows the power cycle. Grep fuzzily. Let a wedged device log while the console zone holds, then power-cycle and back promptly; a 4 MiB zone absorbs hours of watchdog spam first — check zone size.
 - **Kernel ACM console** (`CONFIG_U_SERIAL_CONSOLE=y` + `console=ttyGS0`) — the only channel that survives a wedge, but verify it survives the reporting context: payload is emitted inside `panic()` with IRQs off and other CPUs stopped; a workqueue-deferred console never prints. Test free with a crash injector (LKDTM `/sys/kernel/debug/provoke-crash/DIRECT` where present): synthetic lockup, exact geometry, no flash. A userspace getty yields zero bytes while still enumerating. Both config halves required.
@@ -133,7 +137,7 @@ Carry phase 0 evidence labels into findings. Record running vs deployed identiti
 
 ## 2. Research before implementing — all of these sources
 
-Research precedes implementation. Input: a failure → phase 1 evidence (capturing first; researching an unread symptom is guessing with citations). A new capability → phase 0 artefacts (stock DTB, vendor configs, firmware layout) are the device data, as authoritative as a crash log.
+Research precedes implementation. Input: a failure → phase 1 evidence (capturing first; researching an unread symptom is guessing with citations). A new capability → phase 0 artefacts (stock board description, vendor configs, firmware layout) are the device data, as authoritative as a crash log.
 
 Before writing anything:
 
@@ -145,6 +149,9 @@ Before writing anything:
    - **LKML archives (lore.kernel.org) + Patchwork** — the kernel's own patch review: threads carry rationale, hardware context and register detail that commit messages drop, show reworks and maintainer objections, and distinguish merged, in-flight, reworked or rejected — resolve a fix's state there before porting or re-deriving it, and check it landed in the lineage being built, else it is a backport candidate, not an existing fix. Subsystem trees and linux-next show what the next release carries. With the optional `lei` CLI installed, query the same archive locally — diff prefixes (`dfn:` filename, `dfhh:` hunk header) reach the threads touching an exact driver file or function, and saved searches (`lei q` / `lei up`) follow a subsystem while the port iterates; without it, the lore web interface is the fallback.
    - **GPL-published OEM kernel.** An exact release for this device usually exists: OEM open-source portal (Samsung, Sony, Xiaomi, Fairphone, OnePlus/OPPO, Motorola), GitHub/GitLab mirrors, XDA archives when portals die. Select the tarball matching phase 0's `/proc/version` — they differ. Compliance varies: treat the tree as an oracle to mine (board dts + defconfig; out-of-tree touch/panel/charger/modem drivers with register sequences and firmware handshakes), not something that builds. No exact release? A sibling's usually carries the SoC dtsi — but better is **the stock DTB pulled off the device** (`dd` untouched boot slot, scan `d00dfeed`, `dtc -I dtb -O dts`): ground truth for this board, has corrected wrong sibling-SoC guesses including a SMMU stream ID.
    - **AOSP / Android platform source** — android.googlesource.com, source.android.com: HAL interfaces, framework/services, init + VINTF, SELinux policy, boot-image tooling, native libraries. Record exact branch/tag. Complements, not replaces, the OEM source + stock DTB + vendor implementation.
+   - **Apple-platform mainline enablement** — Asahi Linux, `m1n1` and its device forks, the checkm8/pongoOS payload ecosystems, and the lineage that booted Linux on iBoot-class phones (Project Sandcastle): how the payload chain brings up hardware, where the platform's DT lives, storage access, and what the kernel work assumed. On exploit-booted targets this is usually the only precedent.
+   - **Windows-on-ARM / UEFI ARM enablement** — vendor and Linaro mainline work for compute-platform tablets and laptops, ACPI enablement, EFI-stub bring-up: on firmware-boot targets the same silicon is often enabled here first.
+   - **Windows-Phone-lineage ports** — the conversion and unlock tooling ecosystems around that boot chain (service programmers, bootloader-unlock services, W10M-to-Android conversion guides) and their postmarketOS device packages: usually the only precedent for the loader handoff, DT delivery and modem bring-up on those boards.
    - **postmarketOS** — pmaports device packages + APKBUILDs, merge requests, wiki device pages, SoC-mainline tree.
    - **Halium / UBports** — `halium/android_device_*`, `hybris-boot` configs, UBports ports. Best source for how vendor firmware expects to be driven: blob paths + load order, properties + sockets, sensor/modem HAL configs. Firmware handshake failing? Usually written down here.
    - **Mobian** — the Debian device repos.

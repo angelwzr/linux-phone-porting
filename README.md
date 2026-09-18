@@ -164,10 +164,6 @@ The skill is deliberately device-agnostic: no tool paths, no partition names, no
   - **New source families:** Apple-platform mainline enablement (Asahi Linux, `m1n1` device forks, checkm8/pongoOS), Windows-on-ARM/UEFI ARM enablement, and Windows-Phone-lineage conversion/unlock tooling — added after AOSP, none dropped or reordered.
   - **Retail-OS-neutral evidence:** "keep a bootable Android" generalizes to "keep the retail OS bootable for data gathering"; requirements now ask for a demonstrated boot path per class.
 
-- **2026-09-16**
-  - **Research sources:** LKML patch archives (lore.kernel.org, Patchwork, subsystem and linux-next trees) added as a phase-2 source family — resolve a fix's merged/in-flight/rejected state before porting or re-deriving it, check it landed in the kernel lineage being built, and recover thread-only rationale and register detail that commit messages drop.
-  - **Local patch search:** the optional `lei` CLI queries the LKML archive locally — diff-targeted prefixes (`dfn:`, `dfhh:`) reach threads touching an exact driver file or function; saved searches follow a subsystem across sessions. Lore web search remains the fallback.
-
 Full history in [CHANGELOG.md](CHANGELOG.md).
 
 ## License

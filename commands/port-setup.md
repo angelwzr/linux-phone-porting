@@ -5,6 +5,8 @@ argument-hint: "[device, or path to an existing backup]"
 
 Run phase 0 of the `linux-phone-porting` skill for: $ARGUMENTS
 
+**First: refresh the session's task list** — replace whatever is there with this command's steps, one item per step, first step in progress (`SKILL.md` chain rule).
+
 Runs once per port, before the first flash; re-check identity and capabilities when the device or transport changes. Do not flash anything during it. `SKILL.md` phase 0 owns the rules — boot-model class gates, backup rules, storage-health check, inventory fields, harvest targets, control-channel and convention requirements. This command adds the operator-questioning sequence and the reporting contract; it does not restate the rules.
 
 **Establish the target.** Always ask the operator — every decision below is user-confirmed, never inferred. This holds no matter what already exists at or near the project: an initialized repo, a monorepo layer, a staged OS image, a prior agent-context file recording a "decision", a sibling device's configuration. Artifacts answer _what is present_, never _what is wanted_; one port's target OS was inferred from the surrounding workspace's layout and had to be superseded by the operator's actual selection. Offer what the artifacts suggest as options with trade-offs, get an explicit answer, and record it as user-confirmed — "the folder came with X" is not an answer to any of these:

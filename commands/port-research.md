@@ -5,6 +5,8 @@ argument-hint: "[what you have been asked to build or enable]"
 
 Research before implementing: $ARGUMENTS
 
+**First: refresh the session's task list** — replace whatever is there with this command's steps, one item per step, first step in progress (`SKILL.md` chain rule).
+
 This is `/source-sweep` entered from the other side. Use it when the request is to **build or enable something**, rather than to explain something that broke — a peripheral that has never worked, a driver to wire up, a subsystem to bring up for the first time. Same procedure; what differs is the input and the output.
 
 **Input.** There is no crash log, so the device data is the phase 0 material: reconciled identity and board revision, stock DTB, vendor sensor/modem/HAL configs, firmware blob paths and load order, vendor kernel cmdline, and demonstrated boot/readback capabilities. If those were never established, run `/port-setup` first — researching this board without them means researching some other board that shares its SoC. Keep declared, enumerated, driver-bound and exercised capability evidence distinct.

@@ -5,6 +5,8 @@ argument-hint: "[the feature or capability you want working]"
 
 Get this working on the device, iterating until it does: $ARGUMENTS
 
+**First: refresh the session's task list** — replace whatever is there with this loop's steps, one item per step, first step in progress (`SKILL.md` chain rule).
+
 This runs the `linux-phone-porting` phases in a loop rather than one at a time. It does not replace them — each iteration calls them, and their rules still bind. `SKILL.md` owns the phase rules and source families; the phase commands apply them. Skill maintenance is outside this hardware loop: do not auto-update or change the ruleset mid-loop.
 
 **Before the first iteration.** Confirm phase 0 completed under `/port-setup`, with its target, artifact, backup and control-channel prerequisites available. If not, run `/port-setup` and stop; there is nothing to research against, and the loop would research some other board that shares this SoC. State the target as one falsifiable sentence: what the device will do that it does not do today, and how you will observe it. Then ask the operator, **at every invocation — the budget is a choice for this session, never carried over from a previous one nor recorded as a project setting**: how many refutations is this loop budgeted — **5, 15, or unlimited**. Record the answer only in this session's ledger header; every later stop decision reads against it.

@@ -5,6 +5,8 @@ argument-hint: "[the fix you are about to apply]"
 
 Apply phase 3 of the `linux-phone-porting` skill to: $ARGUMENTS
 
+**First: refresh the session's task list** — replace whatever is there with this command's steps, one item per step, first step in progress (`SKILL.md` chain rule).
+
 `SKILL.md` phase 3 owns the rules this gate enforces — authorization scoping, physical limits, one-variable discipline, the pre-build battery, the deployment state machine, cleanup and completion records. This command is the six-question gate and its routing; it does not restate the rules.
 
 **Precondition:** phase 0 identity, verified backup and demonstrated recovery/control capabilities are available, and phase 1 evidence or phase 2 capability research backs this change. Missing prerequisites return to their phase commands. Immediately before every device write, re-enumerate, pin the transport, reconcile target identity and active boot target with the intended artifact, and stop on ambiguity.

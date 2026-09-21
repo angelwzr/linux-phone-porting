@@ -5,6 +5,8 @@ argument-hint: "[installed skill path or installation scope, if needed]"
 
 Update the installed skill, not the device project: $ARGUMENTS
 
+**First: refresh the session's task list** — replace whatever is there with this command's steps, one item per step, first step in progress (`SKILL.md` chain rule).
+
 **Stop conditions (apply everywhere).**
 
 - Only run when the operator asked. Never mid-`/port-loop` or mid-experiment.

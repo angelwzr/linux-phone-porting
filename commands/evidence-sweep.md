@@ -5,6 +5,8 @@ argument-hint: "[symptom being investigated]"
 
 Run phase 1 of the `linux-phone-porting` skill against the device for: $ARGUMENTS
 
+**First: refresh the session's task list** — replace whatever is there with this command's steps, one item per step, first step in progress (`SKILL.md` chain rule).
+
 **Precondition:** phase 0 must establish the target and its control channels. If identity or transport selection is unresolved, run `/port-setup` first. Re-enumerate after mode changes and pin acquisition to the reconciled target, not the first connected device.
 
 Acquisition and reproduction remain subject to the skill's scoped authorization, pause and physical-test envelope gates. A read-only interface is not presumed harmless; do not increase physical stress to compensate for unverified protection telemetry.

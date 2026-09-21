@@ -5,6 +5,8 @@ argument-hint: "[symptom, or the capability you are about to build]"
 
 Run phase 2 of the `linux-phone-porting` skill for: $ARGUMENTS
 
+**First: refresh the session's task list** — replace whatever is there with this command's steps, one item per step, first step in progress (`SKILL.md` chain rule).
+
 **Precondition — whichever applies:**
 
 - **Investigating a failure:** its evidence must already be captured. If it is not, stop and run `/evidence-sweep` first; this command is not a substitute for reading the device.

@@ -5,6 +5,8 @@ argument-hint: "[component targets, or 'latest' for everything pinned]"
 
 Update the port's components in one pass: $ARGUMENTS
 
+**First: refresh the session's task list** — replace whatever is there with this command's steps, one item per step, first step in progress (`SKILL.md` chain rule).
+
 This is a batch orchestrator over rules that live elsewhere; it adds sequencing, rollback anchors and a ledger, not new rules. `SKILL.md` phase 3 (separate restructuring from upgrades, the pre-build battery, the deployment state machine, the cleanup gate), `/flash-gate`, `/evidence-sweep` and `/port-cleanup` bind every step below.
 
 **Precondition:** phase 0 complete; the currently deployed system known-good and bootable, its identity verifiable through the demonstrated readback; and a complete rollback path for every component about to change — an update that cannot be rolled back is not an update, it is a redeploy. Workspace clean; no uncommitted device state.

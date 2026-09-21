@@ -5,6 +5,8 @@ argument-hint: "[patch, series, capability, or existing submission]"
 
 Prepare or resume an upstream contribution for: $ARGUMENTS
 
+**First: refresh the session's task list** — replace whatever is there with this command's steps, one item per step, first step in progress (`SKILL.md` chain rule).
+
 This command is preparation-first and **human-mediated**: the agent researches, drafts and verifies; **the user owns all maintainer interaction** — submitting, commenting, replying on issues/PRs/mailing lists. Default output is a review-ready bundle plus suggested messages, never a posted issue, PR, email or comment. Any agent-assisted publication needs a separate explicit request approving that exact action and content. This command never touches the device.
 
 **You are responsible for submitting and talking to maintainers.** Review technical claims, public identity, sign-offs and attachments before sending. **Bring replies, review comments and CI results back** — they change the implementation, test requirements, destination or porting approach, and are worth more than a clean local record.

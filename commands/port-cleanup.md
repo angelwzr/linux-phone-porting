@@ -5,6 +5,8 @@ argument-hint: "[device project, shared base, or workspace root]"
 
 Reclaim host-side disk, with proof and measurement: $ARGUMENTS
 
+**First: refresh the session's task list** — replace whatever is there with this command's steps, one item per step, first step in progress (`SKILL.md` chain rule).
+
 Workspace maintenance only — never touches the phone. Device-side cleanup keeps `SKILL.md` phase 3's gate and is out of scope here.
 
 **Preconditions — stop without them.**

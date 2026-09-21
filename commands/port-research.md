@@ -24,4 +24,4 @@ This is `/source-sweep` entered from the other side. Use it when the request is 
 - The smallest first change that would produce a legible result, stated with its falsifier — the cheapest experiment whose result kills the plan either way. That probe is built before anything larger.
 - Any shared defect blocking the plan, with exact affected/fixed revisions, captured or proposed boundary reproduction clearly distinguished, and qualified advisory/CVE applicability. Record whether a candidate fix is submitted, accepted, merged or released rather than treating these as equivalent.
 
-Do not write the change in this command. It ends at the plan, and `/flash-gate` still applies before anything reaches the device.
+Do not write the change in this command. The plan hands off to `/flash-gate` — carry its smallest first change and the falsifier there yourself before anything reaches the device; do not deliver the plan and wait.

@@ -88,7 +88,7 @@ A phone or tablet with a **demonstrated boot path**. On retail-unlock hardware (
 
 ## Commands
 
-Optional slash commands for individual phases, the full loop, and separate installation maintenance.
+Optional slash commands for individual phases, the full loop, upstream preparation, workspace cleanup and installation maintenance.
 
 - **`/port-setup`** — _run once, at the start of a port._ Establishes the exact variant, target OS integration contract, interface/session and boot topology, verifies backup and demonstrated control/recovery operations, checks storage health and builds the component/document inventory from stock evidence. Userdata exclusion is not wipe permission.
 
@@ -103,6 +103,7 @@ Optional slash commands for individual phases, the full loop, and separate insta
 - **`/port-loop`** — _you want a capability working and are happy to let the agent iterate._ Asks for a refutation budget (5, 15, or unlimited), then researches, gates, applies authorized tests, verifies and records. Every third refutation widens scope. Pauses, physical limits and permission boundaries bind unlimited loops too; protected writes and userdata loss require separate authorization. Completion records distinguish target success from unresolved faults and preserve history.
 
 - **`/port-upstream`** — _a fix or capability is portable and worth offering upstream._ Checks whether the work already exists (adopting it counts as success), reads each destination's current submission rules, prepares and verifies the series against the real base, and hands you a reviewed bundle with suggested messages. You own all maintainer interaction; the command tracks prepared → submitted → accepted → merged → released in a ledger and turns review feedback into revisions.
+- **`/port-cleanup`** — _disk pressure on a porting workspace._ Inventories stale artifacts, old shared kernel/OS bases, abandoned build outputs and store closures with measured sizes, proves each candidate unreferenced by the current port before proposing it, and deletes only what the operator confirms item by item. Afterwards it re-checks references, builds and paths and reports the space actually freed. Workspace-only: the phone and the device-side cleanup gate stay with phase 3.
 - **`/linux-phone-porting-update`** — _you explicitly want to maintain the installed skill._ Verifies install provenance and channel, reviews the fetched changelog, fast-forwards a clean Git installation to the inspected revision, and reconciles companion links without overwriting local work. Runs outside the hardware phases; never self-updates from `/port-loop`.
 
 `/source-sweep` and `/port-research` are the same phase approached from opposite directions — one starts from a symptom, the other from a request — and both feed `/flash-gate`. Each command states its own precondition, so you can start anywhere.

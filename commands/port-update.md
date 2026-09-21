@@ -15,7 +15,7 @@ This is a batch orchestrator over rules that live elsewhere; it adds sequencing,
 
 **2. Frame the targets, ask once.** Enumerate the candidates: kernel lineage, SoC/common patch-series rebase, device DT and patches, firmware packages, userspace packages and apps, OS platform/channel, and bootloader-adjacent artefacts where the class has them. For each: current → target, and the reason. Before proposing targets, sweep: known regressions in the target kernel version (LKML/lore), the target project's release and upgrade notes, sibling ports already on the target version. Present the list with dependency notes and get the operator's confirmation of scope and order — the target list is an operator decision, like the loop budget.
 
-**3. Order by dependency; one component class per deployment cycle.** Never combine a kernel-version bump with a layout or restructure move, and never bundle unrelated upgrades into one write — a passing multi-component update teaches nothing about which part worked. Typical order: kernel lineage (series rebase + config migration) → SoC/common series → device DT/patches → firmware → userspace/apps → platform channel. Each class: build → gate → deploy → verify before the next begins.
+**3. Order by dependency; one component class per deployment cycle.** Never combine a kernel-version bump with a layout or restructure move, and never bundle unrelated upgrades into one write — a passing multi-component update teaches nothing about which part worked. Typical order: kernel lineage (series rebase + config migration) → SoC/common series → device DT/patches → firmware → userspace/apps → platform channel. Each class: build → gate → deploy → verify before the next begins. A kernel-version move deploys the kernel with its matching module tree in the same gated cycle — boot image and system closure together; a kernel flashed alone leaves the rootfs running mismatched modules, and the breakage surfaces only where a hardware-dependent module loads (one upgrade passed `uname -r` while camera modules missed the new tree).
 
 **4. Per component:**
 
@@ -24,7 +24,7 @@ This is a batch orchestrator over rules that live elsewhere; it adds sequencing,
 - **Build:** the pre-build battery before any full rebuild; select artifacts explicitly, report per artifact.
 - **Write/deploy:** `/flash-gate` for every device write; the deployment state machine observed separately (transfer, next-boot selection, activation, observed reboot).
 - **Verify:** the component's own function AND a regression pass over capabilities that already worked — one upgrade lost sound-card registration to module coldplug ordering while later manual init worked; earlier wins are part of the acceptance surface. `/evidence-sweep` captures before/after under the same controlled conditions.
-- **Ledger:** one line per component: from → to, patch retirements with evidence, verification results, the rollback anchor for this step.
+- **Ledger:** one line per component: from → to, patch retirements with evidence, verification results, the rollback anchor for this step. Checks that came back empty are recorded as empty — no regressions in the pre-bump sweep, no patches absorbed, no config options migrated — because an unrecorded negative is indistinguishable from a skipped check.
 
 **5. Stop and hold when:** a verification fails after the standard bounded retries (hold = roll that component back to its anchor or pause the batch — state which in the ledger); the same refutation repeats three times on one component → `/port-research` on it, not a fourth attempt; the operator defers permission; the next step's rollback path cannot be proven.
 
@@ -37,8 +37,8 @@ This is a batch orchestrator over rules that live elsewhere; it adds sequencing,
 - **Channels**: every recorded control channel still answers after the reboot; slot/retry budget refilled where the boot class has one.
 - **Telemetry**: protection and thermal readings behave as before at idle — no new warnings that were previously absent.
 
-Any failure here routes to the step-5 hold rules: the batch holds, the ledger records what failed and against which component, and the close-out below does not run.
+Each gate item leaves a recorded result — the clean ones too; an unrecorded check reads as skipped. Any failure here routes to the step-5 hold rules: the batch holds, the ledger records what failed and against which component, and the close-out below does not run.
 
-**7. Close.** Reconcile the ledger with the completion-record rule — current state, tested revisions, acceptance results, limitations, authorization. Update the project's authority pointers the update moved (flake lock, APKBUILD, pinned revisions). Then `/port-cleanup` retires the orphaned kernels, generations, images and store closures — only after the health gate above has passed.
+**7. Close.** Reconcile the ledger with the completion-record rule — current state, tested revisions, acceptance results, limitations, authorization. Update the project's authority pointers the update moved — pinned revisions, flake lock, APKBUILD — and the current-state records a fresh session reads first (the agent context files): the tested revision must be named where the next session's preconditions look, not only in the update's own evidence directory. Then `/port-cleanup` retires the orphaned kernels, generations, images and store closures — only after the health gate above has passed.
 
 Report: the ledger, per-component outcomes, what was retired and why (absorption evidence), rollback anchors retained, and any component deliberately left behind with the reason.

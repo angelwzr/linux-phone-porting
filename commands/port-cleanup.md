@@ -21,7 +21,7 @@ Workspace maintenance only — never touches the phone. Device-side cleanup keep
 2. **Inventory by class.**
 
    - **Build outputs** — Kbuild objects/modules/`.cmd`/`.tmp_versions` in tracked module dirs, boot-image unpack staging, generated docs, local caches. Candidate when tracked inputs regenerate them.
-   - **Result links** — classify from deploy records, not names: the link the last deployment consumed (keep), older iterations (stale), dead targets (dangling).
+   - **Result links** — classify from deploy records, not names: the link the last deployment consumed (keep), older iterations (stale), dead targets (dangling), build-output links no deployment ever consumed (stale — they pin store closures nothing else references).
    - **Shared bases** — `kernel/<version>/`, `soc/*`, `os/*` not required by any consumer. In use if any consumer flake/lock pins them, or the recorded known-good recovery build needs them. Enumerate pins; never infer from directory names.
    - **Logs** — keep unconditionally: every `LATEST-*` target, the current boot's log, anything docs or ledgers cite. Propose the rest oldest-first; operator sets the retention count.
    - **Artifacts — one decision per manifest record:**
@@ -41,12 +41,13 @@ Workspace maintenance only — never touches the phone. Device-side cleanup keep
 
 4. **Propose, confirm per item.** Table: item, class, action (delete / unlink+GC / relocate / keep), measured size, evidence, cost if wrong. Include totals split by mechanism and a kept-and-large list (protected, current deployment, recovery path). Ask; wait. Blanket "delete everything" is refused; silence or a partial answer leaves unconfirmed items in place. Disk changed since step 1 ⇒ re-measure, re-propose.
 
-5. **Execute in order.** Relocations + manifest edits → stale/dangling links, approved logs, build outputs → base trees last, after every consumer pin naming them is re-pointed and re-locked → store content only via the package manager's scoped reclamation of unreachable paths. Never manual store deletion; never blanket GC that can eat the protected recovery closure; on unsure GC flags `find-docs` the tool's docs, else its manual. Verify protected closures still resolve after. Mid-run discoveries return to step 4.
+5. **Execute in order.** Relocations + manifest edits → stale/dangling links, approved logs, build outputs → base trees last, after every consumer pin naming them is re-pointed and re-locked → store content only via the package manager's scoped reclamation of unreachable paths. Never manual store deletion; never blanket GC that can eat the protected recovery closure — pin every closure that must survive reclamation (the recorded recovery path, the deployed system, the known-good rollback) as an explicit package-manager GC root, in a recorded location named for its purpose, and verify every pin still resolves after; on unsure GC flags `find-docs` the tool's docs, else its manual. Mid-run discoveries return to step 4.
 
 6. **Verify.**
 
    - **References:** re-sweep every removed path — zero live hits; a hit now is a failed evidence step: reinstate from the store or record the loss plainly. Kept `LATEST-*` and result links resolve; every flake input and lock entry resolves to an existing tree.
    - **Builds:** flake eval/check proves inputs, pins and package definitions resolve — state what eval does not prove; build-reachable removals require building the consuming package (or the operator's named target), never a full image unless asked.
-   - **Paths:** manifest old→new map updated; no doc, script or lock names a missing path.
+   - **State:** the run's tree changes — manifest rows, ignore rules, tracked deletions, relocations — are committed before the report; a cleanup that leaves the working tree dirty has half-executed itself.
+   - **Paths:** manifest old→new map updated; no doc, script or lock names a missing path; no dangling result link remains in the swept roots — a dead symlink is a removal that did not happen.
 
-7. **Report freed space.** `df` after versus before plus per-item accounting; explain deltas (shared store closures, GC over- or under-estimate). List removed (sizes), relocated (old→new), kept and why, manifest and lock changes, declined GC with estimated yield, and any assumption the numbers proved wrong.
+7. **Report freed space.** Persist the report as a file in the project's records, not only in conversation — a session ends, and the next run must not need archaeology to learn what was removed, freed, kept, and why. `df` after versus before plus per-item accounting; explain deltas (shared store closures, GC over- or under-estimate). List removed (sizes), relocated (old→new), kept and why, manifest and lock changes, declined GC with estimated yield, and any assumption the numbers proved wrong.

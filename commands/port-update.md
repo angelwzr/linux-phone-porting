@@ -26,6 +26,17 @@ This is a batch orchestrator over rules that live elsewhere; it adds sequencing,
 
 **5. Stop and hold when:** a verification fails after the standard bounded retries (hold = roll that component back to its anchor or pause the batch — state which in the ledger); the same refutation repeats three times on one component → `/port-research` on it, not a fourth attempt; the operator defers permission; the next step's rollback path cannot be proven.
 
-**6. Close.** Reconcile the ledger with the completion-record rule — current state, tested revisions, acceptance results, limitations, authorization. Update the project's authority pointers the update moved (flake lock, APKBUILD, pinned revisions). Then `/port-cleanup` retires the orphaned kernels, generations, images and store closures — only after the batch passes real reboot + runtime checks.
+**6. Post-batch device health gate — the run is not done until the device itself passes.** After the last component's acceptance:
+
+- **Reboot once more through a demonstrated channel** and confirm boot persistence — runtime success ≠ boot persistence, and the last component can break an earlier one's boot.
+- **Read the failure surfaces**: full dmesg/journal since the update boot for _new_ error classes — hardware errors, thermal trips, OOM, firmware failures; harvest the pstore/collector archive if anything died. Compare against the pre-update baseline, not against silence.
+- **Storage**: re-read the wear/health report and compare against the phase 0 record; any I/O error gets the re-probe rule — a media-failure verdict must survive a later re-probe before it retires anything.
+- **Power**: charge state and battery telemetry sane; an unexplained drain is a finding, not background noise (one update-era gadget drop drained a battery into a false boot-hang).
+- **Channels**: every recorded control channel still answers after the reboot; slot/retry budget refilled where the boot class has one.
+- **Telemetry**: protection and thermal readings behave as before at idle — no new warnings that were previously absent.
+
+Any failure here routes to the step-5 hold rules: the batch holds, the ledger records what failed and against which component, and the close-out below does not run.
+
+**7. Close.** Reconcile the ledger with the completion-record rule — current state, tested revisions, acceptance results, limitations, authorization. Update the project's authority pointers the update moved (flake lock, APKBUILD, pinned revisions). Then `/port-cleanup` retires the orphaned kernels, generations, images and store closures — only after the health gate above has passed.
 
 Report: the ledger, per-component outcomes, what was retired and why (absorption evidence), rollback anchors retained, and any component deliberately left behind with the reason.

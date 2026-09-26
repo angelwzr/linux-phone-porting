@@ -159,11 +159,18 @@ Any skill covering the same capability can substitute — the names are the defa
 
 The skill is deliberately device-agnostic: no tool paths, no partition names, no hashes. Keep your own port's specifics in your project's `CLAUDE.md` or a sibling skill, and leave this one as the method.
 
+## Cost
+
+The skill is ~10,500 words (~19 k tokens) and loads in full every device session. A command adds 1,200–2,100; a typical mid-port iteration (SKILL.md + one command) runs ~20–21 k tokens — under 10 % of a 200 k context.
+
+That cost is deliberate and incident-backed. Every rule encodes a measured failure from a real port: a pwn-decay misdiagnosis burned ~3 h; four consecutive rebuilds burned on unchecked missing symbols; a 28 MiB reserved-memory shortfall caused ~340 wedges before the diff found it. One prevented misdiagnosis outweighs ~100 sessions of the token spend. A compression audit (2026-09-26) measured the safe reduction ceiling at ~60 words — the remaining density is falsifiers, numbers and boundary conditions, and 18 fresh-context controls confirmed the rules elicit correct behavior (15 passed, 1 gap closed, 2 covered-adjacent).
+
 ## Changelog
 
 - **2026-09-26**
   - **Coverage audit as the update's test method.** A seven-device source harvest (142 candidates) triaged through "no guidance without a failing baseline": 18 fresh-context controls against the pre-edit skill — 15 passed, 1 failed (web-source pinning, below); per-candidate dispositions recorded in the audit of record. Harvest broadly, then let passing/failing controls decide what earns wording.
   - **Web-source pinning in the phase-2 sweep ledger.** Mutable web sources are pinned at access time (wiki oldid/last-modified, branch commit hash); unpinned entries are method gaps to re-fetch, not evidence; search-synthesized assertions are discarded when a primary read contradicts them. Compression audit measured the remaining ceiling at ~60 words — density is the value; not pursued.
+  - **Cost section in the README.** Documents the load cost (~19 k tokens/session, ~20–21 k with one command) and its justification: every rule is incident-backed, one prevented misdiagnosis outweighs ~100 sessions of token spend, and the compression audit bounds safe reduction at ~60 words.
 
 Full history in [CHANGELOG.md](CHANGELOG.md).
 

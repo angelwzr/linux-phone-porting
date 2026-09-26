@@ -179,6 +179,9 @@ One prevented misdiagnosis covers ~100 sessions of the token cost. Reduction was
   - **Coverage audit as the update's test method.** A seven-device source harvest (142 candidates) triaged through "no guidance without a failing baseline": 18 fresh-context controls against the pre-edit skill — 15 passed, 1 failed (web-source pinning, below); per-candidate dispositions recorded in the audit of record. Harvest broadly, then let passing/failing controls decide what earns wording.
   - **Web-source pinning in the phase-2 sweep ledger.** Mutable web sources are pinned at access time (wiki oldid/last-modified, branch commit hash); unpinned entries are method gaps to re-fetch, not evidence; search-synthesized assertions are discarded when a primary read contradicts them. Compression audit measured the remaining ceiling at ~60 words — density is the value; not pursued.
   - **Cost section in the README.** Documents the load cost (~19 k tokens/session, ~20–21 k with one command) and its justification: every rule is incident-backed, one prevented misdiagnosis outweighs ~100 sessions of token spend, and the compression audit bounds safe reduction at ~60 words.
+  - **Inventory the port tree before declaring a capability missing.** A greenfield-driver conclusion from upstream sources alone was refuted by the port's own patch series already carrying the full stack; the port's series is now the first research family, with the live `uevent`/dmesg check as the one-command refutation.
+  - **Per-device priority measurement.** A power gap that killed one device did not transfer to the next; a ten-minute passive power-supply capture cancelled a proposed bring-up priority.
+  - **In-place recovery for one-direction-dead USB networking.** UDC unbind/rebind + gadget-unit restart over a surviving serial channel restored the link in ~23 s with `boot_id` unchanged, after an interface bounce alone had failed.
 
 Full history in [CHANGELOG.md](CHANGELOG.md).
 

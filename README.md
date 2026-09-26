@@ -6,6 +6,8 @@
 
 An agent skill for porting mainline Linux to a phone. It makes your coding agent gather evidence and do research **before** it writes a fix.
 
+**Contents:** [Why](#why) · [Without the skill vs with it](#without-the-skill-vs-with-it) · [Install](#install) · [Updating](#updating) · [Requirements](#requirements) · [The four phases](#the-four-phases) · [Commands](#commands) · [Folder structure](#recommended-folder-structure) · [Pairs well with](#pairs-well-with) · [Adapting it](#adapting-it) · [Cost](#cost) · [Changelog](#changelog) · [License](#license)
+
 ## Why
 
 Every guess on a phone under bring-up costs a build, a flash, and a boot. Five to ten minutes, and most guesses are wrong.
@@ -163,7 +165,13 @@ The skill is deliberately device-agnostic: no tool paths, no partition names, no
 
 The skill is ~10,500 words (~19 k tokens) and loads in full every device session. A command adds 1,200–2,100; a typical mid-port iteration (SKILL.md + one command) runs ~20–21 k tokens — under 10 % of a 200 k context.
 
-That cost is deliberate and incident-backed. Every rule encodes a measured failure from a real port: a pwn-decay misdiagnosis burned ~3 h; four consecutive rebuilds burned on unchecked missing symbols; a 28 MiB reserved-memory shortfall caused ~340 wedges before the diff found it. One prevented misdiagnosis outweighs ~100 sessions of the token spend. A compression audit (2026-09-26) measured the safe reduction ceiling at ~60 words — the remaining density is falsifiers, numbers and boundary conditions, and 18 fresh-context controls confirmed the rules elicit correct behavior (15 passed, 1 gap closed, 2 covered-adjacent).
+The cost buys measured failure prevention. Each rule encodes a specific incident from a real port, with the numbers that justify it:
+
+- A pwn-session misdiagnosis cost ~3 h; the session-mechanics rules exist to prevent that class.
+- Four consecutive kernel rebuilds were burned on unchecked missing symbols; the pre-build battery rule (apply-check, symbol check, Kconfig check, unit compile) prevents exactly that sequence.
+- A 28 MiB reserved-memory shortfall caused ~340 hard wedges before a region-by-region diff found it; the reserved-memory diff rule encodes the fix.
+
+One prevented misdiagnosis covers ~100 sessions of the token cost. Reduction was tested rather than assumed: a compression audit (2026-09-26) measured the reduction ceiling at ~60 words across 18 fresh-context controls (15 passed, 1 gap closed and fixed, 2 covered-adjacent). The remaining density is falsifiers, numbers and boundary conditions — the part that makes the rules checkable.
 
 ## Changelog
 

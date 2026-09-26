@@ -2,5 +2,9 @@
 logs/
 tmp/
 .procoder/
+
+# graft's local graph cache — regenerable, not committed (run `graft build`).
+graft/
+
 CLAUDE.md
 AGENTS.md

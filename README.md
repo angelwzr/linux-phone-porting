@@ -163,7 +163,7 @@ The skill is deliberately device-agnostic: no tool paths, no partition names, no
 
 - **2026-09-26**
   - **Coverage audit as the update's test method.** A seven-device source harvest (142 candidates) triaged through "no guidance without a failing baseline": 18 fresh-context controls against the pre-edit skill — 15 passed, 1 failed (web-source pinning, below); per-candidate dispositions recorded in the audit of record. Harvest broadly, then let passing/failing controls decide what earns wording.
-  - **Web-source pinning in the phase-2 sweep ledger.** Mutable web sources are pinned at access time (wiki oldid/last-modified, branch commit hash); unpinned entries are method gaps to re-fetch, not evidence; search-synthesized assertions are discarded when a primary read contradicts them.
+  - **Web-source pinning in the phase-2 sweep ledger.** Mutable web sources are pinned at access time (wiki oldid/last-modified, branch commit hash); unpinned entries are method gaps to re-fetch, not evidence; search-synthesized assertions are discarded when a primary read contradicts them. Compression audit measured the remaining ceiling at ~60 words — density is the value; not pursued.
 
 Full history in [CHANGELOG.md](CHANGELOG.md).
 

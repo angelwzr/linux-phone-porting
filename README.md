@@ -144,7 +144,7 @@ Publishable firmware is different: it goes to a sibling `firmware-publishable/` 
 
 ## Pairs well with
 
-The skill invokes companion skills **by name**, each with a plain-tools fallback when it is not installed. Nothing breaks if you install none of them — the skill works end-to-end on base capabilities — but research and source navigation get better with them:
+The skill invokes companion skills **by name**, each with a plain-tools fallback when it is not installed. It also pairs with optional source-navigation, archive-search and patch-review CLIs. None are hard dependencies — the skill works end-to-end on base capabilities:
 
 - **`linux-kernel-development`** (fallback: `linux-kernel-crash-debug`, then any subsystem-specific kernel skill) — to work out which driver, binding or firmware interface owns a failure, to read a failing dmesg and choose debug knobs during evidence capture, and to reason about a change during implementation. Without any of them, the agent reasons through the driver sources and `Documentation/` directly.
 
@@ -154,6 +154,7 @@ The skill invokes companion skills **by name**, each with a plain-tools fallback
 
 - **`graft`** — optional navigation for an indexed source tree: locate symbols, callers and relevant spans before broad searches. The exact checked-out source remains authoritative; an index or summary is a pointer, not patch evidence. Without it, use direct source search and reads.
 - **`lei`** (public-inbox CLI, not an agent skill) — optional local query interface for the lore.kernel.org archives named in phase 2: diff-targeted prefixes (`dfn:` filename, `dfhh:` hunk header) reach patch threads touching an exact driver file or function, and saved searches (`lei q` / `lei up`) follow a subsystem while a port iterates. Without it, the lore web interface is the fallback.
+- **[Sashiko](https://github.com/sashiko-dev/sashiko) or [Boro](https://github.com/NVIDIA/boro)** — compatible with the skill's evidence-first workflow as optional local kernel-patch reviewers. Use either; neither is required, and running both is not the default. Review an explicit committed candidate within approved provider-disclosure and spending scope; verify findings against source or reproduction. A failed or incomplete review is not a clean result, and no review replaces source research, pre-build checks or real-device acceptance. This is workflow compatibility, not an automatic integration or a claim of verified tool execution.
 
 Any skill covering the same capability can substitute — the names are the defaults the skill tries first, not hard dependencies.
 
@@ -175,13 +176,8 @@ One prevented misdiagnosis covers ~100 sessions of the token cost. Reduction was
 
 ## Changelog
 
-- **2026-09-26**
-  - **Coverage audit as the update's test method.** A seven-device source harvest (142 candidates) triaged through "no guidance without a failing baseline": 18 fresh-context controls against the pre-edit skill — 15 passed, 1 failed (web-source pinning, below); per-candidate dispositions recorded in the audit of record. Harvest broadly, then let passing/failing controls decide what earns wording.
-  - **Web-source pinning in the phase-2 sweep ledger.** Mutable web sources are pinned at access time (wiki oldid/last-modified, branch commit hash); unpinned entries are method gaps to re-fetch, not evidence; search-synthesized assertions are discarded when a primary read contradicts them. Compression audit measured the remaining ceiling at ~60 words — density is the value; not pursued.
-  - **Cost section in the README.** Documents the load cost (~19 k tokens/session, ~20–21 k with one command) and its justification: every rule is incident-backed, one prevented misdiagnosis outweighs ~100 sessions of token spend, and the compression audit bounds safe reduction at ~60 words.
-  - **Inventory the port tree before declaring a capability missing.** A greenfield-driver conclusion from upstream sources alone was refuted by the port's own patch series already carrying the full stack; the port's series is now the first research family, with the live `uevent`/dmesg check as the one-command refutation.
-  - **Per-device priority measurement.** A power gap that killed one device did not transfer to the next; a ten-minute passive power-supply capture cancelled a proposed bring-up priority.
-  - **In-place recovery for one-direction-dead USB networking.** UDC unbind/rebind + gadget-unit restart over a surviving serial channel restored the link in ~23 s with `boot_id` unchanged, after an interface bounce alone had failed.
+- **2026-10-09**
+  - **Optional kernel-patch reviewers.** Lists Sashiko or Boro under “Pairs well with”: either fits the evidence-first workflow, neither is required, and review does not replace real-device acceptance. Documents workflow compatibility, not automatic integration or verified tool execution.
 
 Full history in [CHANGELOG.md](CHANGELOG.md).
 

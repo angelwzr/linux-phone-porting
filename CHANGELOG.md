@@ -1,5 +1,9 @@
 # Changelog
 
+- **2026-11-03**
+  - **QEMU test rigs before device boots.** Phase 3 gains a reproducible offline-rig recipe for separable boot/initramfs, logging, userspace and compatible driver-path experiments. Retains source/config/input identity, emulator topology and raw/recovered evidence; temporary-only inputs previously forced a rig reconstruction. The collector example preserves the measured 100-write-IOPS interruption fixture, final-snapshot status checks and exit 143 without prescribing them for other targets.
+  - **Emulation boundaries and gate routing.** A module reaching probe then waiting on two unimplemented GPU reset/status registers demonstrates partial path coverage, not hardware success or a refuted crash beyond that point. Rig-only stubs/bypasses remain separate from device builds; hardware-dependent questions return to authorized real-device tests. `/flash-gate` question 4 invokes the recipe without duplicating it. No device names, private artifacts or exploit procedures are added.
+
 - **2026-10-09**
   - **Optional kernel-patch reviewers.** README's “Pairs well with” section links Sashiko and Boro as alternative local kernel-patch reviewers compatible with the skill's evidence-first workflow. Either can be used; neither is required, and running both is not the default. The description retains explicit committed-candidate scope, provider-disclosure and spending authorization, source/reproduction checks for findings, failed/incomplete-review honesty, and the distinction between source review and real-device acceptance. This is a documentation-only compatibility statement, not automatic integration or verified end-to-end tool execution; `SKILL.md` and commands are unchanged.
 

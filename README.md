@@ -176,8 +176,9 @@ One prevented misdiagnosis covers ~100 sessions of the token cost. Reduction was
 
 ## Changelog
 
-- **2026-10-09**
-  - **Optional kernel-patch reviewers.** Lists Sashiko or Boro under “Pairs well with”: either fits the evidence-first workflow, neither is required, and review does not replace real-device acceptance. Documents workflow compatibility, not automatic integration or verified tool execution.
+- **2026-11-03**
+  - **QEMU test rigs before device boots.** Phase 3 now covers reproducible same-architecture rigs and failure injection, including a measured collector-interruption fixture.
+  - **Emulation boundaries and gate routing.** `/flash-gate` routes suitable software experiments through the recipe. Missing hardware models and rig-only bypasses cannot establish real-device acceptance.
 
 Full history in [CHANGELOG.md](CHANGELOG.md).
 

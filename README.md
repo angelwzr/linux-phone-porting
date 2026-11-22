@@ -33,18 +33,7 @@ Between hardware sessions, run `/linux-phone-porting-update` or read [the update
 
 ## The four phases
 
-```mermaid
-flowchart TB
-    accTitle: Evidence-first porting workflow
-    accDescr: Preserve stock evidence, then research either a captured failure or a new capability. Only gated trials go ahead. Refutations return to research.
-
-    setup["0 · Stock evidence"] -->|Failure| evidence["1 · Capture failure"]
-    setup -->|New capability| research["2 · Research"]
-    evidence --> research
-    research -->|Gates pass| trial["3 · Test one change"]
-    trial -->|Refuted| research
-    trial -->|Target met| verify["Verify on device"]
-```
+![Porting workflow: preserve stock evidence. Capture evidence for a failure, or start research directly for a new capability. Once the gates pass, test one change. A refutation returns to research; success proceeds to device verification.](workflow.svg)
 
 Stop if the falsifier or a safety prerequisite is missing. A research-only request stops at a host-side gate report: no device access, staging, or reboot. Excluding userdata from a backup does not authorize erasing it.
 

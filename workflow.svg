@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="390" height="365" viewBox="0 0 390 365" role="img" aria-labelledby="title desc">
+  <title id="title">Evidence-first porting workflow</title>
+  <desc id="desc">Preserve stock evidence first. Capture failure evidence for a broken feature, or go straight to research for a new capability. After the gates pass, test one change. A refutation returns to research; a successful trial proceeds to device verification.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 8 8" refX="8" refY="4" markerWidth="8" markerHeight="8" markerUnits="userSpaceOnUse" orient="auto">
+      <path d="M0 0L8 4L0 8Z" fill="#758195"/>
+    </marker>
+  </defs>
+  <g fill="none" stroke="#758195" stroke-width="2" marker-end="url(#arrow)">
+    <path d="M125 54V86"/>
+    <path d="M125 128V160"/>
+    <path d="M125 202V234"/>
+    <path d="M125 276V308"/>
+    <path d="M232 33H375V174H232"/>
+    <path d="M232 255H375V190H232"/>
+  </g>
+  <g fill="#eaf0f7" stroke="#758195">
+    <rect x="18" y="12" width="214" height="42" rx="8"/>
+    <rect x="18" y="86" width="214" height="42" rx="8"/>
+    <rect x="18" y="160" width="214" height="42" rx="8"/>
+    <rect x="18" y="234" width="214" height="42" rx="8"/>
+    <rect x="18" y="308" width="214" height="42" rx="8"/>
+  </g>
+  <g fill="#203048" font-family="system-ui, sans-serif" font-size="16" font-weight="600" text-anchor="middle">
+    <text x="125" y="39">0 · Stock evidence</text>
+    <text x="125" y="113">1 · Capture failure</text>
+    <text x="125" y="187">2 · Research</text>
+    <text x="125" y="261">3 · Test one change</text>
+    <text x="125" y="335">Verify on device</text>
+  </g>
+  <g fill="#f0f3f8">
+    <rect x="41" y="59" width="69" height="21" rx="4"/>
+    <rect x="25" y="207" width="85" height="21" rx="4"/>
+    <rect x="22" y="281" width="88" height="21" rx="4"/>
+    <rect x="250" y="68" width="108" height="21" rx="4"/>
+    <rect x="282" y="215" width="76" height="21" rx="4"/>
+  </g>
+  <g fill="#203048" font-family="system-ui, sans-serif" font-size="13" text-anchor="middle">
+    <text x="75.5" y="74">Failure</text>
+    <text x="67.5" y="222">Gates pass</text>
+    <text x="66" y="296">Target met</text>
+    <text x="304" y="83">New capability</text>
+    <text x="320" y="230">Refuted</text>
+  </g>
+</svg>

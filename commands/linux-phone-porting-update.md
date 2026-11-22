@@ -15,11 +15,11 @@ Update the installed skill, not the device project: $ARGUMENTS
 - Never: reset, stash, clean, force-checkout, force-fetch, rebase, overwrite a copy, replace an existing link, update-all.
 
 1. **Locate the installation.**
-   - Start from the harness's loaded-skill location + configured skill/command dirs.
+   - Start from the harness's loaded-skill location and configured skill/command dirs. For direct reads, identify the installed checkout from the operator-supplied path; never infer it from the working directory.
    - `realpath` the skill-dir and `SKILL.md` links; resolve command links too. Record all paths.
    - Several candidates ⇒ ask the operator to pick one.
    - Detect mechanism from links + metadata, never the dir name:
-     - Manual install = Git clone + per-command symlinks into that clone.
+     - Manual install = verified Git clone, registered or read directly, with any companion command links pointing into that clone.
      - Manager cache (even with `.git`) = manager-owned.
 
 2. **Pick the path.**
@@ -65,6 +65,7 @@ Update the installed skill, not the device project: $ARGUMENTS
    - Same ID ⇒ no update; still check links (step 5).
 
 5. **Preflight links + command set.**
+   - If no companion commands are registered, skip link reconciliation throughout. Reading this file directly does not opt in to command installation.
    - Diff old/new `commands/` lists at those revisions. Plain Markdown only; no links outside the repo.
    - Resolve every companion-command entry in the selected dirs, including dangling symlinks.
    - Links must target this checkout. Copies or links elsewhere ⇒ block.
@@ -83,7 +84,7 @@ Update the installed skill, not the device project: $ARGUMENTS
    - Add missing links: plain `ln -s`, full destination paths, never `ln -sf`; recheck vacancy first. Links are a separate step and can fail independently.
 
 7. **Verify + report honestly.**
-   - Confirm: HEAD = `new`, clean worktree, `SKILL.md` resolves here, every command resolves to its file at that revision.
+   - Confirm: HEAD = `new`, clean worktree, `SKILL.md` resolves here, and every registered companion command resolves to its file at that revision.
    - Git moved but links failed ⇒ report **partial update** + actual HEAD + incomplete destinations. Never claim success, never reset to hide.
    - Couldn't fetch ⇒ report "update not checked", never "up to date".
    - Tell the operator to restart the session. Never resume the hardware loop on mixed old/new instructions.

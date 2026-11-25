@@ -6,7 +6,7 @@
 
 An agent skill for bringing up mainline Linux on phones and tablets. A build, flash, and boot can take 5–10 minutes. Gather evidence before you spend a boot on a guess.
 
-**Contents:** [Install](#install) · [Requirements](#requirements) · [Update the skill](#updating) · [Workflow](#the-four-phases) · [Commands](#commands) · [Workspace](#recommended-folder-structure) · [Changelog](#changelog)
+**Contents:** [Install](#install) · [Requirements](#requirements) · [Update the skill](#updating) · [Workflow](#the-four-phases) · [Examples](#examples) · [Commands](#commands) · [Workspace](#recommended-folder-structure) · [Achievements](#achievements) · [Changelog](#changelog)
 
 ## Install
 
@@ -40,6 +40,14 @@ The agent moves to the next phase when its prerequisites are met. The operator c
 Widen the search after three refutations. A missing receipt does not refute the hypothesis. Verify reboot and runtime before retiring old deployments. Excluding userdata from a backup does not authorize erasing it.
 
 The skill originated in one real port — mainline Linux on a Xiaomi Mi A3, running NixOS on kernels 7.1 and 7.2 — and now incorporates lessons from other ports while keeping each measurement's scope explicit.
+
+## Examples
+
+**Research prompt:** “Using the existing stock artifacts, research touchscreen support on this board. Don’t access or reboot the device.”
+
+[`/port-research`](commands/port-research.md) returns a ranked plan with sources, the smallest test and what would disprove the hypothesis, plus a host-only gate report.
+
+**Display bring-up:** On one port, the desktop still rendered after seven minutes, but the backlit panel stayed black. Preventing the display clocks from being parked and keeping the power domain on restored visible output. That verified [firmware framebuffer output](SKILL.md#3-implement-only-with-a-promising-evidence-backed-hypothesis), not the native panel driver.
 
 ## Commands
 
@@ -84,11 +92,18 @@ None are required. The skill falls back to source, documentation, and web search
 
 An earlier estimate put the loaded `SKILL.md` and one command at about 20–21k tokens. The detail captures costly failure modes, including one 28 MiB reserved-memory shortfall that caused roughly 340 hard wedges. See the [full history](CHANGELOG.md) for measurements and the compression audit.
 
+## Achievements
+
+- **Qualcomm FastRPC:** [PR #393](https://github.com/qualcomm/fastrpc/pull/393) merged. It validates DSP-supplied buffer lengths.
+- **Linux device tree:** The Qualcomm maintainer [applied the SM6125 `reserved_mem1` fix](https://lore.kernel.org/linux-arm-msm/179416929229.628393.16390580991068177022.b4-ty@b4/) to reserve another 28 MiB for firmware.
+
 ## Changelog
 
 - **2026-11-25**
   - **Workflow diagram.** Show the research-only exit and keep verification in phase 3.
   - **README and commands.** Use plainer language for setup, research, testing, and maintenance.
+  - **Examples.** Show a research-only prompt and a measured display result.
+  - **Achievements.** Link two contributions from porting work and state where each landed.
 
 Full history in [CHANGELOG.md](CHANGELOG.md).
 

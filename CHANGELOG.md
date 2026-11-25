@@ -3,6 +3,8 @@
 - **2026-11-25**
   - **Workflow diagram.** Show the failure and new-capability entry points, the host-only research exit, and the return to research after a refuted trial. Keep testing and device verification in phase 3: a trial is not accepted before verification.
   - **README and commands.** Clarify how to load the skill and command files, when to use each command, and which steps the operator owns. Simplify the command wording without changing prerequisites, evidence requirements, or device authorization.
+  - **Examples.** Add a research-only touchscreen prompt and its expected output: a ranked plan with sources, the smallest test, a falsifier and a host-only gate report. Add the measured display case, distinguishing visible firmware framebuffer output from native panel-driver support.
+  - **Achievements.** Link the merged Qualcomm FastRPC PR and the maintainer's application of the SM6125 reserved-memory patch, without claiming a Linux mainline merge or release.
 
 - **2026-11-22**
   - **Firmware display handoff.** Match physical panel observations to trial, DRM frame, CRTC, DPMS and idle state. A backlit panel stayed black while the desktop still rendered with DPMS On after seven minutes. Isolate provider clock parking from power-domain release, with the provider loaded and the framebuffer consumer's binding verified. A holder test that timed out at ~10.7 s before the module loaded was withdrawn as a clock discriminator; with the holder bound and the domain on, restoring stock clock parking reproduced the physical blackout. Retaining both restored firmware scanout, not native panel-driver operation.

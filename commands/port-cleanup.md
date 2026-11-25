@@ -7,9 +7,9 @@ Reclaim host-side disk, with proof and measurement: $ARGUMENTS
 
 **First: refresh the session's task list** — replace whatever is there with this command's steps, one item per step, first step in progress (`SKILL.md` chain rule).
 
-Workspace maintenance only — never touches the phone. Device-side cleanup keeps `SKILL.md` phase 3's gate and is out of scope here.
+Clean only the host workspace. For cleanup on the phone, follow the phase 3 gate in `SKILL.md`.
 
-**Preconditions — stop without them.**
+**Before cleanup:**
 
 - Operator asked explicitly. Never mid-`/port-loop`, mid-experiment, or during a build/deploy.
 - Current state is recorded: agent context files name the tested revision; an artifact manifest (`artifacts/README.md` or equivalent) maps artifact paths to classes. Unmanifested artifact = unknown — classify with the operator first; it cannot be proposed this run.

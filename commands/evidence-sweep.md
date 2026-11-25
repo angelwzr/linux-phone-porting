@@ -11,7 +11,7 @@ Run phase 1 of the `linux-phone-porting` skill against the device for: $ARGUMENT
 
 Acquisition and reproduction remain subject to the skill's scoped authorization, pause and physical-test envelope gates. A read-only interface is not presumed harmless; do not increase physical stress to compensate for unverified protection telemetry.
 
-**Skills:** invoke `linux-kernel-development` if installed, else `linux-kernel-crash-debug`, else any subsystem-specific kernel skill — reading the failing dmesg, choosing debug knobs, and interpreting probe/ramoops/pstore behaviour need its register-level detail; if none is installed, reason from the kernel sources and `Documentation/` directly. Do not propose a fix in this command. The output is evidence, not a diagnosis.
+For evidence interpretation, invoke `linux-kernel-development` if installed, otherwise `linux-kernel-crash-debug` or a subsystem-specific kernel skill. If none is installed, use the kernel source and `Documentation/`. Capture evidence here; leave diagnosis and fixes to phase 2.
 
 1. **Before an authorized reproduction**, enable the relevant, understood debug facilities (`debug_mask`, dynamic debug, `drm.debug`, tracepoints where supported). Do not arm unassessed probes indiscriminately; capture existing evidence while unsafe or unauthorized reproduction remains blocked.
 2. Capture the full dmesg of the failing run to a file on the host. Record exact runtime identity with it: device/board revision, active boot target, kernel version and build identity, DTB, modules, firmware and userspace revisions as observable; distinguish verified identifiers from expected build inputs.
@@ -25,4 +25,4 @@ Acquisition and reproduction remain subject to the skill's scoped authorization,
 
 Report: capture origin, acquisition, coverage and host paths; exact observed runtime identity and evidence levels; unavailable channels and unknown fields; which lines are suspect under step 6; and what the evidence does and does not establish. Keep private values out of output and reconcile current acceptance/authorization fields with their evidence without deleting historical checkpoints.
 
-**Then** the captured evidence is phase 2's input: open `/source-sweep` on the captured evidence yourself — do not deliver the report and wait. If a pause, missing authorization or a blocked channel prevents further work, report exactly what blocks and what would unblock it; otherwise the sweep starts now.
+**Next:** start `/source-sweep` with the captured evidence. If a pause, missing authorization or a blocked channel prevents further work, report what blocks you and what would unblock it.

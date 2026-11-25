@@ -7,13 +7,13 @@ Apply phase 3 of the `linux-phone-porting` skill to: $ARGUMENTS
 
 **First: refresh the session's task list** — replace whatever is there with this command's steps, one item per step, first step in progress (`SKILL.md` chain rule).
 
-`SKILL.md` phase 3 owns the rules this gate enforces — authorization scoping, physical limits, one-variable discipline, the pre-build battery, the deployment state machine, cleanup and completion records. This command is the six-question gate and its routing; it does not restate the rules.
+Follow `SKILL.md` phase 3 for authorization, physical limits, one-variable tests, pre-build checks, deployment, cleanup and completion records. Use the six questions below to decide whether to proceed.
 
 **Precondition:** phase 0 identity, verified backup and demonstrated recovery/control capabilities are available, and phase 1 evidence or phase 2 capability research backs this change. Missing prerequisites return to their phase commands. Immediately before every device write, re-enumerate, pin the transport, reconcile target identity and active boot target with the intended artifact, and stop on ambiguity.
 
 **Safety precondition for every experiment, not just a flash:** apply the skill's scoped authorization, pause, private-calibration and protection gates. For physical output, record limits with units, duration, stop conditions and final safe state; verify enforcement on the actual path. A passing hypothesis gate cannot authorize bypassing limits, increasing stress without proven observability, using guessed calibration or wiping excluded userdata.
 
-Answer each of these before anything is written to the device. Any "no" blocks the flash.
+Answer all six questions before any device write. If any check fails, stop before writing.
 
 1. **What is the hypothesis?** State it as a falsifiable sentence — what is broken, why this change addresses it, and what the device will do differently if it is right.
 2. **Which source backs it — and when was it found?** Name the evidence or the research finding, and say which research pass produced it. "It seems likely" is a refusal; so is a source that only comes from the ledger of earlier iterations when the current framing differs from theirs — after a refutation the backing must come from a pass that ran against the refuted framing, not the one it killed. A design derived from the vendor driver source or the stock DTB passes — naming the artefact is naming the source — but a _newly read_ part of it, not the paragraph a previous hypothesis already leaned on. No applicable precedent found in the searched projects is not a refusal; retain the coverage and access gaps and derive from primary evidence.

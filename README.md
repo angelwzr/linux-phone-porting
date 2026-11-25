@@ -4,9 +4,9 @@
   <img src="logo.png" alt="linux-phone-porting logo" width="100%">
 </p>
 
-An evidence-first agent skill for bringing up mainline Linux on phones and tablets. A blind build, flash, and boot costs 5–10 minutes; make each trial answer one question.
+An agent skill for bringing up mainline Linux on phones and tablets. A build, flash, and boot can take 5–10 minutes. Gather evidence before you spend a boot on a guess.
 
-**Contents:** [Install](#install) · [Requirements](#requirements) · [Workflow](#the-four-phases) · [Commands](#commands) · [Workspace](#recommended-folder-structure) · [Changelog](#changelog)
+**Contents:** [Install](#install) · [Requirements](#requirements) · [Update the skill](#updating) · [Workflow](#the-four-phases) · [Commands](#commands) · [Workspace](#recommended-folder-structure) · [Changelog](#changelog)
 
 ## Install
 
@@ -16,34 +16,34 @@ Clone to an unused destination:
 git clone https://github.com/angelwzr/linux-phone-porting
 ```
 
-- **Agent with skill discovery:** register the checkout using the agent's documented configuration.
-- **Any agent that can read Markdown:** give it [SKILL.md](SKILL.md) and your device and goal. Attach the file if the agent can't read your checkout.
+- If your agent supports skills, register the checkout using its setup instructions.
+- Otherwise, give your agent [SKILL.md](SKILL.md), the exact device, and your goal. Attach the file if the agent cannot read your checkout.
 
-Use the same checkout for any optional [commands](#commands). Preserve existing files and links; keep development edits in a separate clone.
+Use the same checkout for optional [commands](#commands). Leave existing files and links in place. Use a separate clone to edit the skill.
 
 ## Requirements
 
-The device needs a **demonstrated boot path**: an already-unlocked bootloader on retail-unlock targets, an already-working payload on exploit-booted hardware, or a proven way to boot your image on firmware-boot hardware. The skill does not provide unlock or exploit steps.
+Start with a demonstrated boot path: an already-unlocked bootloader on retail-unlock hardware, a payload that already boots on exploit-booted hardware, or a proven way to boot the target image on firmware-boot hardware. The skill does not provide unlock or exploit steps.
 
-The method covers mainline Linux and its target userspace; it is not a device or distro compatibility list.
+The skill covers mainline Linux and userspace integration. It does not certify any device or distro combination.
 
 ## Updating
 
-Between hardware sessions, run `/linux-phone-porting-update` or read [the updater instructions](commands/linux-phone-porting-update.md) directly. Give it the installed checkout's path. It reviews the candidate revision before updating a clean checkout and only reconciles links for registered commands. For older installs without the updater, use the [current upstream instructions](https://github.com/angelwzr/linux-phone-porting/blob/main/commands/linux-phone-porting-update.md). Restart the agent session after updating.
+Between hardware sessions, run `/linux-phone-porting-update` or give your agent [the updater instructions](commands/linux-phone-porting-update.md) and the installed path. The updater inspects the candidate before advancing a clean manual checkout. It skips command links if none are registered. For older installs without the updater, use the [current upstream instructions](https://github.com/angelwzr/linux-phone-porting/blob/main/commands/linux-phone-porting-update.md). Restart the agent session after updating.
 
 ## The four phases
 
-![Porting workflow: preserve stock evidence. Capture evidence for a failure, or start research directly for a new capability. Once the gates pass, test one change. A refutation returns to research; success proceeds to device verification.](workflow.svg)
+![Four phases: set up the port, capture evidence for a failure, research, then test and verify. A new capability goes from setup to research. Research-only work ends with a host-only gate report. A refuted trial returns to research.](workflow.svg)
 
-Stop if the falsifier or a safety prerequisite is missing. A research-only request stops at a host-side gate report: no device access, staging, or reboot. Excluding userdata from a backup does not authorize erasing it.
+The agent moves to the next phase when its prerequisites are met. The operator confirms the target and authorizes device actions. In phase 3, record what would disprove the hypothesis before running the cheapest authorized test. A research-only request allows no device access, staging, next-boot selection, or reboot.
 
-After three refutations, widen the search. A missing receipt is not a refutation. Verify reboot and runtime before cleanup.
+Widen the search after three refutations. A missing receipt does not refute the hypothesis. Verify reboot and runtime before retiring old deployments. Excluding userdata from a backup does not authorize erasing it.
 
 The skill originated in one real port — mainline Linux on a Xiaomi Mi A3, running NixOS on kernels 7.1 and 7.2 — and now incorporates lessons from other ports while keeping each measurement's scope explicit.
 
 ## Commands
 
-Use a registered slash command or give your agent the linked file alongside `SKILL.md`. If it names another command, open that file the same way. Parallel subagents are optional; sequential sweeps use the same coverage ledger.
+Run a registered slash command or give your agent the linked file with `SKILL.md`. If a command calls another, load that file too. Without parallel subagents, use the same source ledger in order.
 
 | Command                                                                 | When to use it                                          |
 | ----------------------------------------------------------------------- | ------------------------------------------------------- |
@@ -78,7 +78,7 @@ None are required. The skill falls back to source, documentation, and web search
 - `linux-kernel-development` or `linux-kernel-crash-debug` for kernel analysis.
 - `find-docs` and `wigolo` for current docs and source sweeps.
 - `graft` and `lei` for indexed source and Linux mailing-list archives.
-- [Sashiko](https://github.com/sashiko-dev/sashiko) or [Boro](https://github.com/NVIDIA/boro) for optional patch review within approved disclosure and spending limits. Verify findings against source or reproduction.
+- [Sashiko](https://github.com/sashiko-dev/sashiko) or [Boro](https://github.com/NVIDIA/boro) for optional patch review. Get approval for disclosure and spending; check findings against source or reproduction.
 
 ## Cost
 
@@ -86,10 +86,9 @@ An earlier estimate put the loaded `SKILL.md` and one command at about 20–21k 
 
 ## Changelog
 
-- **2026-11-22**
-  - **Firmware display.** Verify physical output separately from rendered frames.
-  - **USB topology.** No enumerated devices does not prove a controller is unwired.
-  - **README.** Agent-neutral quick start, shorter command reference, and a workflow diagram.
+- **2026-11-25**
+  - **Workflow diagram.** Show the research-only exit and keep verification in phase 3.
+  - **README and commands.** Use plainer language for setup, research, testing, and maintenance.
 
 Full history in [CHANGELOG.md](CHANGELOG.md).
 

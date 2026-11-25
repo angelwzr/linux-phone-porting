@@ -20,12 +20,12 @@ Load these skills by name, in this order — invoke each; if it is not installed
 
 Then run **phase 2 in full**: the selected target platform's requirements and discovered related projects, ordered source families, component-document mapping, wiring reconciliation, identity/codename and archive searches, version-matched advisory/source checks, and optional `graft` navigation are authoritative in `SKILL.md`, not duplicated here. Named projects are research destinations, not a target compatibility list. Use parallel subagents where possible. The point is that the fix comes from all sources, not the first plausible hit. Apply the skill's scoped stock-DT authority: establish the selected variant/overlay, distinguish configuration from physical identity or measured wiring, and preserve unresolved conflicts rather than declaring one source universally decisive.
 
-**Sweep mechanics — self-executing, ledger-gated:**
+**How to run the sweep:**
 
-- **The sweep starts now.** Precondition met means no further operator input: do not wait to be told to search, which tool to use, or where to look. `SKILL.md`'s phase 2 is the procedure; this command is only its entry point.
-- **Open a sweep ledger** in the project's research notes: one row per open question × source family, each row carrying the consulted revision/query, the finding + applicability, or a recorded gap (source + access failure). The next session inherits coverage, not a re-search.
-- **Cover every source family** — one parallel subagent per family when available, otherwise fill the same ledger in order. Record findings or explicit gaps; a silent subagent is a gap to re-ask, not a negative result.
-- **Exit criterion:** the sweep is done only when every applicable family row carries a finding or a recorded gap. First plausible hit ≠ done. Only then reconcile records, rank hypotheses, attach falsifiers.
+- Start as soon as the precondition is met. Follow phase 2 in `SKILL.md` without waiting for the operator to name a tool or source.
+- Open a ledger in the project's research notes. For each open question and source family, record the revision or query and the finding with its applicability, or record the source and why you could not inspect it.
+- Cover every source family. Use one parallel subagent per family when available; otherwise fill the same ledger in order. Follow up if a subagent returns nothing. Silence is a gap, not a negative result.
+- Close the sweep only when every applicable row has a finding or a recorded gap. Then reconcile the records, rank the hypotheses, and state what would disprove each one.
 
 **Then sweep sister devices within that procedure.** Enumerate ports of the recorded device family and near-neighbours on the same board or SoC generation, including internal codenames rather than only retail names. Diff each port's board files (dts, defconfig, firmware blob lists) component-by-component against the phase 0 inventory: matching components yield proven driver-plus-firmware combinations; non-matching ones mark divergence. Adopt only what the diff confirms against this variant's spec sheet and stock DTB. A sister device is a lead, not proof of target compatibility; a same-SoC rescue image or loader remains an uncertified candidate.
 

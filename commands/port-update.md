@@ -7,9 +7,9 @@ Update the port's components in one pass: $ARGUMENTS
 
 **First: refresh the session's task list** — replace whatever is there with this command's steps, one item per step, first step in progress (`SKILL.md` chain rule).
 
-This is a batch orchestrator over rules that live elsewhere; it adds sequencing, rollback anchors and a ledger, not new rules. `SKILL.md` phase 3 (separate restructuring from upgrades, the pre-build battery, the deployment state machine, the cleanup gate), `/flash-gate`, `/evidence-sweep` and `/port-cleanup` bind every step below.
+Use this command to order upgrades, record decisions and keep a rollback point for each component. Follow `SKILL.md` phase 3 for separating upgrades from layout changes, pre-build checks, deployment and cleanup. Apply `/flash-gate`, `/evidence-sweep` and `/port-cleanup` as directed below.
 
-**Precondition:** phase 0 complete; the currently deployed system known-good and bootable, its identity verifiable through the demonstrated readback; and a complete rollback path for every component about to change — an update that cannot be rolled back is not an update, it is a redeploy. Workspace clean; no uncommitted device state.
+**Before updating:** finish phase 0. Confirm the current system is known-good and bootable, and verify its identity through the demonstrated readback path. Prove a rollback path for every component you plan to change. Require a clean workspace with no uncommitted device state.
 
 **1. Inventory the current state — the rollback anchor.** For every updatable component record: name, pinned version/revision (flake lock, APKBUILD tag, package version, firmware blob hash), the artifact it produces, and the command that verifies it. Read back the deployed identities now and write the anchor into an update ledger file — prose holds no numbers. Confirm the rollback path actually restores; a saved image alone may not recover the system.
 

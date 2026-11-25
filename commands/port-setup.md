@@ -7,7 +7,7 @@ Run phase 0 of the `linux-phone-porting` skill for: $ARGUMENTS
 
 **First: refresh the session's task list** — replace whatever is there with this command's steps, one item per step, first step in progress (`SKILL.md` chain rule).
 
-Runs once per port, before the first flash; re-check identity and capabilities when the device or transport changes. Do not flash anything during it. `SKILL.md` phase 0 owns the rules — boot-model class gates, backup rules, storage-health check, inventory fields, harvest targets, control-channel and convention requirements. This command adds the operator-questioning sequence and the reporting contract; it does not restate the rules.
+Run this once per port, before the first flash. Recheck identity and capabilities if the device or transport changes. Do not flash during setup. Follow the boot, backup, storage, inventory, harvest, control-channel and workspace rules in `SKILL.md` phase 0. Use the questions and report below to record the operator's choices and your evidence.
 
 **Establish the target.** Always ask the operator — every decision below is user-confirmed, never inferred. This holds no matter what already exists at or near the project: an initialized repo, a monorepo layer, a staged OS image, a prior agent-context file recording a "decision", a sibling device's configuration. Artifacts answer _what is present_, never _what is wanted_; one port's target OS was inferred from the surrounding workspace's layout and had to be superseded by the operator's actual selection. Offer what the artifacts suggest as options with trade-offs, get an explicit answer, and record it as user-confirmed — "the folder came with X" is not an answer to any of these:
 
@@ -28,7 +28,7 @@ Runs once per port, before the first flash; re-check identity and capabilities w
 
 **Prove the control channels before choosing a build strategy** — SKILL.md's channel rules apply: discover and exercise the target's available tools (none individually mandatory), pin every command to a verified serial or transport, re-enumerate after mode changes, prove the boot/fetch/readback operations the proposed workflow needs before building for them, and exercise at least one post-boot channel into target Linux with its selector, address and demonstrated operations recorded.
 
-**Lock the project to this ruleset.** Write into the project's agent context files (`CLAUDE.md`, `AGENTS.md`, equivalents): **all work touching this device goes through the skill's ruleset; no device action outside it** — phase 2 research, phase 3 gates, flashes only through the gates above. These rules are load-bearing, not advisory: a session that "just quickly" flashes outside them is how a backup-only-recoverable mistake happens.
+**Record the rules in the project's agent context files** (`CLAUDE.md`, `AGENTS.md`, equivalents): all device work must follow this skill. Research in phase 2; pass phase 3's gates before flashing.
 
 **Mine it as a research source**, and tell the user what was found — per SKILL.md's research-value list: the stock board description for this class (record which artefact was obtained: boot-image DTB, ACPI tables, or vendor-kernel DT), firmware blobs and load order, vendor kernel cmdline and boot-image layout, the exact kernel version string that selects the GPL OEM release, and vendor sensor/modem/HAL configs.
 
@@ -36,4 +36,4 @@ Runs once per port, before the first flash; re-check identity and capabilities w
 
 Report: the reconciled target identity, OS integration contract, intended interface/session and unresolved fields; backup provenance, coverage, integrity and restore evidence separately; the research artefacts extracted; the persistent inventory and linked document/acquisition records with unresolved gaps; hardware evidence levels; demonstrated transport capabilities and recovery limitations; and whether the retail OS remains available as a data-gathering boot.
 
-**Then** phase 0 is done — it does not run again for this port. Ask the operator what should work first (the first capability to build or symptom to chase), enter the cycle at the matching entry point — `/evidence-sweep` for a failure, `/port-research` for a capability — and keep advancing under the skill's chain rule without waiting to be told the next step.
+**After phase 0**, ask the operator what should work first. Use `/evidence-sweep` for a failure or `/port-research` for a new capability. Continue under the skill's chain rule without waiting for another prompt.

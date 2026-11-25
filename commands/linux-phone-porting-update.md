@@ -7,12 +7,12 @@ Update the installed skill, not the device project: $ARGUMENTS
 
 **First: refresh the session's task list** — replace whatever is there with this command's steps, one item per step, first step in progress (`SKILL.md` chain rule).
 
-**Stop conditions (apply everywhere).**
+**Stop conditions:**
 
-- Only run when the operator asked. Never mid-`/port-loop` or mid-experiment.
-- Never touch device repos, kernels, images, the phone.
-- Any blocker (no network, no permissions, unknown provenance, no safe fast-forward) ⇒ stop and report the manual action. Never improvise, never install tools, never elevate.
-- Never: reset, stash, clean, force-checkout, force-fetch, rebase, overwrite a copy, replace an existing link, update-all.
+- Update only at the operator's request. Never update during `/port-loop` or an experiment.
+- Leave device repos, kernels, images and the phone untouched.
+- If access, permissions, provenance or a safe fast-forward are missing, stop and report the manual action. Do not improvise, install tools or elevate privileges.
+- Do not reset, stash, clean, force-checkout, force-fetch, rebase, overwrite copies, replace existing links or update every package.
 
 1. **Locate the installation.**
    - Start from the harness's loaded-skill location and configured skill/command dirs. For direct reads, identify the installed checkout from the operator-supplied path; never infer it from the working directory.

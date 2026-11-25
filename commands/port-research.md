@@ -7,13 +7,13 @@ Research before implementing: $ARGUMENTS
 
 **First: refresh the session's task list** — replace whatever is there with this command's steps, one item per step, first step in progress (`SKILL.md` chain rule).
 
-This is `/source-sweep` entered from the other side. Use it when the request is to **build or enable something**, rather than to explain something that broke — a peripheral that has never worked, a driver to wire up, a subsystem to bring up for the first time. Same procedure; what differs is the input and the output.
+Use this command to research something you want to build or enable. Use the same sweep as `/source-sweep`, but start with stock evidence instead of a failure log.
 
 **Input.** There is no crash log, so the device data is the phase 0 material: reconciled identity and board revision, stock DTB, vendor sensor/modem/HAL configs, firmware blob paths and load order, vendor kernel cmdline, and demonstrated boot/readback capabilities. If those were never established, run `/port-setup` first — researching this board without them means researching some other board that shares its SoC. Keep declared, enumerated, driver-bound and exercised capability evidence distinct.
 
 **Procedure.** Run `/source-sweep` in full, including the complete current phase 2 procedure in `SKILL.md`; its source families and expanded search/check rules stay there, not in this command. Read every question about "the failure" as a question about the capability instead: which driver or binding would own it, what the vendor stack does today, what mainline already supports.
 
-**Output.** Not a hypothesis about a symptom, but a plan with its sources attached:
+Return a plan with sources. Include:
 
 - Who owns the hardware for it — a kernel driver, a firmware applet, or DSP-side code — answered by scanning the phase 0 images for the peripheral's symbols rather than assumed from the kernel side. A kernel-side shim with the real driver in firmware turns the plan from porting a driver into loading one.
 - What mainline already provides — its exported API, whether it reaches userspace or is kernel-internal only, and its gates (machine allowlists, pre-loaded semantics, built-in rather than module) — and what is missing.
